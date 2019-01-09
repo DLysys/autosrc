@@ -1,0 +1,184 @@
+{% extends 'super.html' %}
+
+{% block title %}详细{% endblock %}
+
+{% block content %}
+    <div class="layui-col-md8 content detail">
+      <div class="fly-panel detail-box">
+        <h1>{{ k.title }}</h1>
+        <div class="fly-detail-info">
+          <!-- <span class="layui-badge">审核中</span> -->
+          <span class="layui-badge layui-bg-green fly-detail-column">{{ k.k_category }}</span>
+          
+{#          <span class="layui-badge" style="background-color: #999;">未结</span>#}
+{#          <!-- <span class="layui-badge" style="background-color: #5FB878;">已结</span> -->#}
+{#          #}
+{#          <span class="layui-badge layui-bg-black">置顶</span>#}
+{#          <span class="layui-badge layui-bg-red">精帖</span>#}
+
+          <div class="fly-admin-box" data-id="123">
+{#            <span class="layui-btn layui-btn-xs jie-admin" type="del">删除</span>#}
+{#            #}
+{#            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="1">置顶</span> #}
+{#            <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="0" style="background-color:#ccc;">取消置顶</span> -->#}
+{#            #}
+{#            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="1">加精</span> #}
+            <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span> -->
+          </div>
+          <span class="fly-list-nums"> 
+            <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i>{{ k.knackuser_set.all|length }}</a>
+{#            <i class="iconfont" title="人气">&#xe60b;</i> 99999#}
+          </span>
+        </div>
+        <div class="detail-about">
+          <a class="fly-avatar" href="../../../static/fly-3.0/html/user/home.html">
+            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心">
+          </a>
+          <div class="fly-detail-user">
+            <a href="../../../static/fly-3.0/html/user/home.html" class="fly-link">
+              <cite>{{ k.author }}</cite>
+{#              <i class="iconfont icon-renzheng" title="认证信息：{{ rows.user.approve }}"></i>#}
+{#              <i class="layui-badge fly-badge-vip">VIP3</i>#}
+            </a>
+            <span>{{ k.c_time|date:"Y-m-j G:i" }}</span>
+          </div>
+          <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
+            <span style="padding-right: 10px; color: #FF7200"></span>
+{#            <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a href="">编辑此贴</a></span>#}
+          </div>
+        </div>
+        <div class="detail-body photos">
+          <p>{{ k.content }}</p>
+{#          封面<hr>#}
+
+        </div>
+      </div>
+
+      <div class="fly-panel detail-box" id="flyReply">
+        <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
+          <legend>回帖</legend>
+        </fieldset>
+
+        <ul class="jieda" id="jieda">
+            {% for c in k.knackuser_set.all %}
+                <li data-id="111">
+            <a name="item-1111111111"></a>
+            <div class="detail-about detail-about-reply">
+              <a class="fly-avatar" href="">
+                <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt=" ">
+              </a>
+              <div class="fly-detail-user">
+                <a href="" class="fly-link">
+                  <cite>{{ c.user }}</cite>
+                </a>
+              </div>
+              <div class="detail-hits">
+                <span>{{ c.c_time|date:"Y-m-j G:i" }}</span>
+              </div>
+            </div>
+            <div class="detail-body jieda-body photos">
+              <p>{{ c.comment }}</p>
+            </div>
+            <div class="jieda-reply">
+              <span class="jieda-zan" type="zan">
+                <i class="iconfont icon-zan"></i>
+                <em>0</em>
+              </span>
+              <span type="reply">
+                <i class="iconfont icon-svgmoban53"></i>
+                回复
+              </span>
+              <div class="jieda-admin">
+{#                <span type="edit">编辑</span>#}
+{#                <span type="del" id="del-comment">删除</span>#}
+{#                <span class="jieda-accept" type="accept">采纳</span>#}
+              </div>
+            </div>
+          </li>
+            {% endfor %}
+        </ul>
+        
+        <div class="layui-form layui-form-pane">
+            {% if request.user.is_authenticated %}
+{#              <form action="{% url 'knack:knack_detail' knack_id %}" method="post">#}
+                <form class="layui-form">
+                    <div class="layui-form-item layui-form-text">
+                      <a name="comment"></a>
+                      <div class="layui-input-block">
+                        <textarea id="L_content" name="content" required lay-verify="required" placeholder="请输入内容"  class="layui-textarea fly-editor" style="height: 150px;"></textarea>
+                      </div>
+                    </div>
+                    <div class="layui-form-item">
+                      <input type="hidden" id="knack_id" value="{{ knack_id }}">
+                      <button class="layui-btn" lay-submit lay-filter="add-comment">提交回复</button>
+                    </div>
+              </form>
+            {% else %}
+                <p>请<a href="{% url 'users:login' %}?next={% url 'knack:knack_detail' knack_id %}">登录</a>后再添加评论。</p>
+            {% endif %}
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        layui.use(['layer','form'], function(){
+        var layer = layui.layer
+           ,form = layui.form;
+
+          //监听提交
+          form.on('submit(add-comment)', function(data){
+              var content = $("#L_content").val();
+          $.ajax({
+              type: "post",
+              url:"{% url 'knack:knack_comment' %}",
+              data:{'knack_id': {{ knack_id }}, 'content': content},
+              dateType:"json",
+              async: false,
+              {#beforeSend:function(xhr, settings){#}
+              {#    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");#}
+              {#  },#}
+              success: function(data) {
+                  if(data.status == 'success'){
+                      alert("提交成功");
+                      window.location.reload();//刷新当前页面.
+                  }else if(data.status == 'fail'){
+                      $('#jsCompanyTips').html(data.msg)
+                      alert("提交失败！");
+                  }
+              },
+          });
+          return false;
+            });
+
+          });
+    </script>
+    <script>
+    layui.cache.page = 'jie';
+    layui.cache.user = {
+      username: '游客'
+      ,uid: -1
+      ,avatar: '../../res/images/avatar/00.jpg'
+      ,experience: 83
+      ,sex: '男'
+    };
+    layui.config({
+      version: "3.0.0"
+      ,base: '../../res/mods/'
+    }).extend({
+      fly: 'index'
+    }).use(['fly', 'face'], function(){
+      var $ = layui.$
+      ,fly = layui.fly;
+      //如果你是采用模版自带的编辑器，你需要开启以下语句来解析。
+      /*
+      $('.detail-body').each(function(){
+        var othis = $(this), html = othis.html();
+        othis.html(fly.content(html));
+      });
+      */
+    });
+    </script>
+{% endblock %}
+
