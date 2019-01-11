@@ -25,6 +25,7 @@ def index(request):
 def knack_detail(request, knack_id):
     try:
         k = models.Knack.objects.get(id=knack_id)
+        sn = k.knackuser_set.filter(support=1)
     except Exception as e:
         print(e)
     return render(request, 'knack/detail.html', locals())
@@ -74,6 +75,34 @@ def knack_add(request):
             return HttpResponse('{"status":"fail"}', content_type='application/json')
     else:
         return render(request, 'knack/add.html', locals())
+
+
+@csrf_exempt
+@login_required
+def knack_edit(request, knack_id):
+    types = models.Knack.type_choice
+    try:
+        k = models.Knack.objects.get(id=knack_id)
+    except Exception as e:
+        print(e)
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        category = request.POST.get('category')
+        type = request.POST.get('type')
+
+        try:
+            k.title = title
+            k.content = content
+            k.k_category_id = category
+            k.type = type
+            k.save()
+            return HttpResponse('{"status":"success"}', content_type='application/json')
+        except Exception as e:
+            print(e)
+            return HttpResponse('{"status":"fail"}', content_type='application/json')
+    else:
+        return render(request, 'knack/edit.html', locals())
 
 
 @csrf_exempt

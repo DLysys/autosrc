@@ -136,7 +136,7 @@ def user_center(request):
     user = request.user
     my_knacks = Knack.objects.filter(author=user)
 
-    return render(request, 'index.html', locals())
+    return render(request, 'center.html', locals())
 
 
 @login_required

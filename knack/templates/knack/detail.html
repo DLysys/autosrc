@@ -31,7 +31,7 @@
           </span>
         </div>
         <div class="detail-about">
-          <a class="fly-avatar" href="../../../static/fly-3.0/html/user/home.html">
+          <a class="fly-avatar" href="{% url 'users:user_home' k.author_id %}">
             {% if k.author.profile.avatar %}
                 <img src="/media/{{ k.author.profile.avatar }}" alt="">
             {% else %}
@@ -39,7 +39,7 @@
             {% endif %}
           </a>
           <div class="fly-detail-user">
-            <a href="../../../static/fly-3.0/html/user/home.html" class="fly-link">
+            <a href="{% url 'users:user_home' k.author_id %}" class="fly-link">
               <cite>{{ k.author }}</cite>
 {#              <i class="iconfont icon-renzheng" title="认证信息：{{ rows.user.approve }}"></i>#}
 {#              <i class="layui-badge fly-badge-vip">VIP3</i>#}
@@ -53,8 +53,22 @@
         </div>
         <div class="detail-body photos">
           <p>{{ k.content }}</p>
-{#          封面<hr>#}
+        </div>
+        <div class="jieda-reply">
+          <span class="jieda-zan" type="zan">
+            <i class="iconfont icon-zan"></i>
+            <em>{{ sn|length }}</em>
+          </span>
+{#            <span class="jieda-cai" type="cai">#}
+{#                <i class="iconfont icon-cai"></i>#}
+{#                <em>0</em>#}
+{#              </span>#}
 
+{#              <div class="jieda-admin">#}
+{#                <span type="edit">编辑</span>#}
+{#                <span type="del" id="del-comment">删除</span>#}
+{#                <span class="jieda-accept" type="accept">采纳</span>#}
+{#              </div>#}
         </div>
       </div>
 
@@ -62,7 +76,6 @@
         <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
           <legend>回帖</legend>
         </fieldset>
-
         <ul class="jieda" id="jieda">
             {% for c in k.knackuser_set.all %}
                 <li data-id="111">
@@ -159,7 +172,6 @@
           });
           return false;
             });
-
           });
     </script>
 {% endblock %}
