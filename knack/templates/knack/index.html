@@ -9,7 +9,11 @@
             {% for k in ks %}
                 <li>
                     <a href="{% url 'users:user_home' k.author_id %}" class="fly-avatar">
-                      <img src="/media/{{ k.author.profile.avatar }}" alt="">
+                        {% if k.author.profile.avatar %}
+                            <img src="/media/{{ k.author.profile.avatar }}" alt="">
+                        {% else %}
+                            <img src="/media/avatar/default.png">
+                        {% endif %}
                     </a>
                     <h2>
                       <a class="layui-badge">{{ k.get_type_display }}</a>

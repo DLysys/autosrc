@@ -55,7 +55,11 @@
                 {% for hu in hot_users %}
                   <dd>
                     <a href="{% url 'users:user_home' hu.user_id %}">
-                      <img src="/media/{{ hu.avatar }}"><cite>{{ hu.username }}</cite><i>{{ hu.num_comments }}</i>
+                        {% if k.author.profile.avatar %}
+                            <img src="/media/{{ hu.avatar }}"><cite>{{ hu.username }}</cite><i>{{ hu.num_comments }}</i>
+                        {% else %}
+                            <img src="/media/avatar/default.png">
+                        {% endif %}
                     </a>
                   </dd>
                 {% endfor %}
