@@ -32,7 +32,11 @@
         </div>
         <div class="detail-about">
           <a class="fly-avatar" href="../../../static/fly-3.0/html/user/home.html">
-            <img src="/media/{{ user.profile.avatar }}" alt="">
+            {% if k.author.profile.avatar %}
+                <img src="/media/{{ k.author.profile.avatar }}" alt="">
+            {% else %}
+                <img src="/media/avatar/default.png">
+            {% endif %}
           </a>
           <div class="fly-detail-user">
             <a href="../../../static/fly-3.0/html/user/home.html" class="fly-link">
@@ -65,7 +69,11 @@
             <a name="item-1111111111"></a>
             <div class="detail-about detail-about-reply">
               <a class="fly-avatar" href="">
-                <img src="/media/{{ c.user.profile.avatar }}" alt=" ">
+                  {% if c.user.profile.avatar %}
+                    <img src="/media/{{ c.user.profile.avatar }}" alt="">
+                {% else %}
+                    <img src="/media/avatar/default.png">
+                {% endif %}
               </a>
               <div class="fly-detail-user">
                 <a href="{% url 'users:user_home' c.user.id %}" class="fly-link">
