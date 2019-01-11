@@ -1,0 +1,172 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="找窍门">
+  <meta name="description" content="窍门">
+  <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}">
+  <link rel="stylesheet" href="{% static 'css/global.css' %}">
+</head>
+<body>
+
+<div class="fly-header layui-bg-black">
+  <div class="layui-container">
+    <a class="fly-logo" href="/">
+{#      <img src="{% static 'images/logo.png' %}" alt="layui">#}
+    </a>
+    <ul class="layui-nav fly-nav layui-hide-xs">
+      <li class="layui-nav-item layui-this">
+        <a href="/"><i class="iconfont icon-jiaoliu"></i>窍门</a>
+      </li>
+      <li class="layui-nav-item">
+{#        <a href="../../../static/fly-3.0/html/case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>#}
+      </li>
+      <li class="layui-nav-item">
+        <a href="#" target="_blank"><i class="iconfont icon-ui"></i>关于我</a>
+      </li>
+    </ul>
+    
+    <ul class="layui-nav fly-nav-user">
+      
+      <!-- 登入后的状态 -->
+        {% if request.user.is_authenticated %}
+            <li class="layui-nav-item">
+            <a class="fly-nav-avatar" href="javascript:;">
+              <cite class="layui-hide-xs">{{ user }}</cite>
+{#              <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>#}
+{#              <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>#}
+                {% if user.profile.avatar %}
+                    <img src="/media/{{ user.profile.avatar }}">
+                {% else %}
+                    <img src="/media/avatar/default.png">
+                {% endif %}
+            </a>
+            <dl class="layui-nav-child">
+                <dd><a href="{% url 'users:user_center' %}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>用户中心</a></dd>
+              <dd><a href="{% url 'users:user_set' %}"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+{#              <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>#}
+{#              <dd><a href="{% url 'users:user_home' user_id %}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>#}
+                {% if request.user.is_superuser %}
+                    <dd><a href="/admin/" target="_blank"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe770;</i>后台管理</a></dd>
+                {% endif %}
+              <hr style="margin: 5px 0;">
+              <dd><a href="{% url 'users:logout' %}" style="text-align: center;">退出</a></dd>
+            </dl>
+          </li>
+
+{#      <li class="layui-nav-item layui-hide-xs">#}
+{#        <a href="/app/qq/" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" title="QQ登入" class="iconfont icon-qq"></a>#}
+{#      </li>#}
+{#      <li class="layui-nav-item layui-hide-xs">#}
+{#        <a href="/app/weibo/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>#}
+{#      </li>#}
+      
+      <!-- 未登入的状态 -->
+        {% else %}
+          <li class="layui-nav-item">
+            <a class="iconfont icon-touxiang layui-hide-xs" href="{% url 'users:login' %}"></a>
+          </li>
+          <li class="layui-nav-item">
+            <a href="{% url 'users:login' %}">登入</a>
+          </li>
+          <li class="layui-nav-item">
+            <a href="{% url 'users:register' %}">注册</a>
+          </li>
+        {% endif %}
+    </ul>
+  </div>
+</div>
+
+<div class="fly-panel fly-column">
+  <div class="layui-container">
+    <ul class="layui-clear">
+      <li class="layui-hide-xs layui-this"><a href="/">首页</a></li>
+        {% for t in types %}
+            <li><a href="{% url 'knack:knack_type' t.0 %}">{{ t.1 }}</a></li>
+        {% endfor %}
+      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+      
+      <!-- 用户登入后显示 -->
+{#      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="../../../static/fly-3.0/html/user/index.html">我发表的贴</a></li>#}
+{#      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="../../../static/fly-3.0/html/user/index.html#collection">我收藏的贴</a></li>#}
+    </ul> 
+    
+    <div class="fly-column-right layui-hide-xs"> 
+      <span class="fly-search" id="knack-search"><i class="layui-icon"></i></span>
+      <a href="{% url 'knack:knack_add' %}" class="layui-btn">分享窍门</a>
+    </div>
+  </div>
+</div>
+
+{% block body %}{% endblock %}
+
+<div class="fly-footer">
+  <p><a href="/" target="_blank">社区</a> 2018 &copy; <a href="/" target="_blank">dandh 出品</a></p>
+    <p>本站所展示的信息来自网络转载或由用户自行提供，其原创性以及文中陈述文字和内容未经本网站证实</p>
+{#    <p>对本文以及其中全部或者部分内容、文字的真实性、完整性、及时性本网站不作任何保证或承诺，不承担任何保证责任，请读者仅作参考，并请自行核实相关内容。</p>#}
+    <p>如果以上内容侵犯您的版权或者非授权发布和其它问题请联系客服删除，谢谢。</p>
+        <p>第{{ vm.count }}位访客
+{#    <a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a>#}
+{#    <a href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>#}
+{#    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>#}
+  </p>
+</div>
+ 
+<script src="{% static 'layui/layui.js' %}"></script>
+{#<script src="{% static 'layui/layui.all.js' %}"></script>#}
+<script src="{% static 'layui/lay/modules/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'layui/lay/modules/jquery-2.2.3.min.js' %}"></script>
+<script>
+    $("#knack-search").click( function() {
+        layui.use('layer', function () {
+            layer.open({
+                type: 1
+                , title: false
+                , closeBtn: false
+                , shadeClose: true
+                , maxWidth: 10000
+                , skin: 'fly-layer-search'
+                , content: ['<form action="{% url 'knack:knack_search' %}">'
+                    , '<input autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">'
+                    , '</form>'].join('')
+                , success: function (layero) {
+                    var input = layero.find('input');
+                    input.focus();
+
+                    layero.find('form').submit(function () {
+                        var val = input.val();
+                        if (val.replace(/\s/g, '') === '') {
+                            return false;
+                        }
+                        {#input.val('site:layui.com ' + input.val());#}
+                    });
+                }
+            })
+        })
+    })
+</script>
+
+{#<ul class="layui-fixbar">#}
+{#    <li class="layui-icon" lay-type="bar1" style="background-color:#009688"></li>#}
+{#    <li class="layui-icon layui-fixbar-top" lay-type="top" style="background-color: rgb(0, 150, 136); display: list-item;"></li>#}
+{#</ul>#}
+<script>
+    layui.use(['util'], function(){
+        $ = layui.jquery;
+        element = layui.element();//面包导航
+        laypage = layui.laypage;//分页
+        layer = layui.layer;
+        form = layui.form();
+        util = layui.util;
+        util.fixbar({
+            top: true ,css: {right: 15, bottom: 35} ,bgcolor: '#393D49' ,click: function(type){ if(type === 'top'){ layer.msg('返回顶部') } } }); });
+
+</script>
+
+{% block js %}{% endblock %}
+
+</body>
+</html>

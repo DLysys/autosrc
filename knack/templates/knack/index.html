@@ -1,0 +1,47 @@
+{% extends 'super.html' %}
+
+{% block title %}首页 | 找窍门{% endblock %}
+
+{% block content %}
+    <div class="layui-col-md8">
+        <div class="fly-panel" style="margin-bottom: 0;">
+            <ul class="fly-list">
+            {% for k in ks %}
+                <li>
+                    <a href="{% url 'users:user_home' k.author_id %}" class="fly-avatar">
+                      <img src="/media/{{ k.author.profile.avatar }}" alt="">
+                    </a>
+                    <h2>
+                      <a class="layui-badge">{{ k.get_type_display }}</a>
+                        <a href="{% url 'knack:knack_detail' k.id %}">{{ k.title }}</a>
+                    </h2>
+                    <div class="fly-list-info">
+                      <a href="{% url 'users:user_home' k.author_id %}" link>
+                        <cite>{{ k.author }}</cite>
+                        <!--
+                        <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
+                        <i class="layui-badge fly-badge-vip">VIP3</i>
+                        -->
+                      </a>
+                      <span>{{ k.c_time|date:"Y-m-j G:i" }}</span>
+
+        {#              <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>#}
+                      <!--<span class="layui-badge fly-badge-accept layui-hide-xs">已结</span>-->
+                      <span class="fly-list-nums">
+                        <i class="iconfont icon-pinglun1" title="评论"></i>{{ k.knackuser_set.all|length }}
+                      </span>
+                    </div>
+                    <div class="fly-list-badge">
+                      <!--<span class="layui-badge layui-bg-red">精帖</span>-->
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <div style="text-align: center">
+          <div class="laypage-main">
+            <a href="" class="laypage-next">更多</a>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
