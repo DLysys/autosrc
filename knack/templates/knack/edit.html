@@ -18,7 +18,7 @@
                       <div class="layui-col-md3">
                           <label class="layui-form-label">发布类型</label>
                           <div class="layui-input-block">
-                            <select lay-verify="required" name="class" lay-filter="column">
+                            <select lay-verify="required" name="class" lay-filter="column" id="s_type">
                               <option></option>
                                 {% for t in types %}
                                     <option value="{{ t.0 }}" id="L_type">{{ t.1 }}</option>
@@ -29,7 +29,7 @@
                     <div class="layui-col-md3">
                       <label class="layui-form-label">窍门分类</label>
                       <div class="layui-input-block">
-                        <select lay-verify="required" name="class" lay-filter="column">
+                        <select lay-verify="required" name="class" lay-filter="column" id="s_category">
                           <option></option>
                             {% for cate in cates %}
                                 <option value="{{ cate.id }}" id="L_category">{{ cate.name }}</option>
@@ -74,8 +74,8 @@
           form.on('submit(knack-add)', function(data){
               var title = $("#L_title").val();
               var content = $("#L_content").val();
-              var category = $("#L_category").val();
-              var type = $("#L_type").val();
+              var category = $("#s_category").val();
+              var type = $("#s_type").val();
 
           $.ajax({
               type: "post",
