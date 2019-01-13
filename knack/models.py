@@ -12,6 +12,8 @@ class Knack(models.Model):
         ('share', '分享'),
         ('help', '求助'),
         ('advice', '建议'),
+        ('notice', '公告'),
+
     )
 
     title = models.CharField(max_length=100, default='', verbose_name="标题")
