@@ -29,7 +29,8 @@ def index(request):
 def knack_detail(request, knack_id):
     try:
         k = models.Knack.objects.get(id=knack_id)
-        sn = k.knackuser_set.filter(support=1)
+        # sn = k.knackuser_set.filter(support=1)
+        res = models.KnackUser.objects.get(knack_id=knack_id, user_id=request.user)
     except Exception as e:
         print(e)
     return render(request, 'knack/detail.html', locals())

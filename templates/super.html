@@ -36,6 +36,15 @@
             </ul>
           </div>
         <dl class="fly-panel fly-list-one">
+            <dt class="fly-panel-title">最赞窍门</dt>
+            {% for hk in hot_knacks %}
+                <dd>
+                  <a href="{% url 'knack:knack_detail' hk.knack_id %}">{{ hk.title }}</a>
+                  <span><i class="iconfont icon-pinglun1"></i>{{ hk.num_knacks }}</span>
+                </dd>
+            {% endfor %}
+        </dl>
+        <dl class="fly-panel fly-list-one">
             <dt class="fly-panel-title">热议窍门</dt>
             {% for hk in hot_knacks %}
                 <dd>
@@ -43,11 +52,7 @@
                   <span><i class="iconfont icon-pinglun1"></i>{{ hk.num_knacks }}</span>
                 </dd>
             {% endfor %}
-            <!-- 无数据时 -->
-            <!--
-            <div class="fly-none">没有相关数据</div>
-            -->
-          </dl>
+        </dl>
         <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
             <h3 class="fly-panel-title">积分排行</h3>
             <dl>

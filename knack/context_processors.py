@@ -15,6 +15,13 @@ def add_variable_to_context(request):
         except Exception as e:
             print(e)
 
+    zan_knacks = KnackUser.objects.values('knack_id').annotate(num_knacks=Count('knack_id')).order_by('-num_knacks')[:5]
+    for hk in hot_knacks:
+        try:
+            hk['title'] = Knack.objects.get(id=hk['knack_id']).title
+        except Exception as e:
+            print(e)
+
     hot_users = Profile.objects.order_by('-point')[:10]
     for hu in hot_users:
         try:

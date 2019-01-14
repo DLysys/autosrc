@@ -55,9 +55,13 @@
           <p>{{ k.content }}</p>
         </div>
         <div class="jieda-reply">
-          <span class="jieda-zan" type="zan">
+          {% if res.support %}
+              <span class="jieda-zan zanok" type="zan">
+          {% else %}
+              <span class="jieda-zan" type="zan">
+          {% endif %}
             <i class="iconfont icon-zan"></i>
-            <em>{{ sn|length }}</em>
+            <em>{{ k.support }}</em>
           </span>
 {#            <span class="jieda-cai" type="cai">#}
 {#                <i class="iconfont icon-cai"></i>#}

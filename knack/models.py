@@ -22,6 +22,7 @@ class Knack(models.Model):
     k_category = models.ForeignKey('Category', null=True, blank=True, verbose_name='分类', on_delete=models.CASCADE, related_name='k_category')
     content = models.TextField(verbose_name='内容', default='')
     type = models.CharField(choices=type_choice, max_length=20, default='', verbose_name="类型")
+    support = models.IntegerField(default=0, verbose_name='点赞数')
 
     def __str__(self):
         return self.title
@@ -47,18 +48,6 @@ class Category(models.Model):
 
     name = models.CharField(max_length=100, default='', verbose_name="分类名称")
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
-    # s_ip = models.CharField(max_length=100, default='', verbose_name="源IP地址")
-    # s_port = models.CharField(max_length=100, default='', verbose_name="源端口")
-    # d_device = models.CharField(max_length=100, default='', verbose_name="目的设备")
-    # d_port = models.CharField(max_length=100, default='', verbose_name="目标端口")
-    # protocol = models.CharField(max_length=100, default='', verbose_name="协议")
-    # p_des = models.CharField(max_length=100, default='', verbose_name="端口说明")
-    # port_can_change = models.CharField(choices=port_can_change, default='no', max_length=10, verbose_name='监听端口是否可更改')
-    # auth_method = models.CharField(max_length=100, default='', verbose_name="认证方式")
-    # encryption = models.CharField(max_length=32, verbose_name='加密方式', null=True, blank=True,)
-    # version = models.CharField(max_length=32, verbose_name='版本', null=True, blank=True,)
-    # scn = models.CharField(max_length=32, verbose_name='特殊场景', null=True, blank=True,)
-    # status = models.CharField(choices=choice_status, default='await', max_length=10, verbose_name='审批状态')
 
     def __str__(self):
         return self.name
