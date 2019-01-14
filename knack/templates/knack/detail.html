@@ -168,6 +168,10 @@
                       $('#jsCompanyTips').html(data.msg)
                       alert("提交失败！");
                   }
+                  else if(data.status == 'error'){
+                      $('#jsCompanyTips').html(data.msg)
+                      alert("提交失败，不能评价自己发布的窍门！");
+                  }
               },
           });
           return false;

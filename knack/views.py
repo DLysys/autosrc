@@ -57,6 +57,14 @@ def knack_comment(request):
         content = request.POST.get('content')
         knack_id = request.POST.get('knack_id')
         try:
+            k = models.Knack.objects.get(id=knack_id)
+            if k.author == request.user:
+                return HttpResponse('{"status":"error"}', content_type='application/json')
+            else:
+                pass
+        except Exception as e:
+            print(e)
+        try:
             user_profile = models.Profile.objects.get(user=request.user)
         except Exception as e:
             print(e)
