@@ -48,23 +48,41 @@
             <div class="fly-none">没有相关数据</div>
             -->
           </dl>
-          <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
-            <h3 class="fly-panel-title">回贴排行</h3>
+        <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
+            <h3 class="fly-panel-title">积分排行</h3>
             <dl>
               <!--<i class="layui-icon fly-loading">&#xe63d;</i>-->
                 {% for hu in hot_users %}
                   <dd>
                     <a href="{% url 'users:user_home' hu.user_id %}">
                         {% if hu.avatar %}
-                            <img src="/media/{{ hu.avatar }}"><cite>{{ hu.username }}</cite><i>{{ hu.num_comments }}</i>
+                            <img src="/media/{{ hu.avatar }}">
                         {% else %}
                             <img src="/media/avatar/default.png">
                         {% endif %}
+                        <cite>{{ hu.username }}</cite><i>{{ hu.point }}</i>
                     </a>
                   </dd>
                 {% endfor %}
             </dl>
           </div>
+{#          <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">#}
+{#            <h3 class="fly-panel-title">回贴排行</h3>#}
+{#            <dl>#}
+{#              <!--<i class="layui-icon fly-loading">&#xe63d;</i>-->#}
+{#                {% for hu in hot_users %}#}
+{#                  <dd>#}
+{#                    <a href="{% url 'users:user_home' hu.user_id %}">#}
+{#                        {% if hu.avatar %}#}
+{#                            <img src="/media/{{ hu.avatar }}"><cite>{{ hu.username }}</cite><i>{{ hu.num_comments }}</i>#}
+{#                        {% else %}#}
+{#                            <img src="/media/avatar/default.png">#}
+{#                        {% endif %}#}
+{#                    </a>#}
+{#                  </dd>#}
+{#                {% endfor %}#}
+{#            </dl>#}
+{#          </div>#}
 
           <div class="fly-panel" style="padding: 20px 0; text-align: center;">
             <div class="fly-panel-title">

@@ -14,12 +14,21 @@ def add_variable_to_context(request):
             hk['title'] = Knack.objects.get(id=hk['knack_id']).title
         except Exception as e:
             print(e)
-    hot_users = KnackUser.objects.values('user_id').annotate(num_comments=Count('user_id')).order_by('-num_comments')[:10]
+
+    hot_users = Profile.objects.order_by('-point')[:10]
     for hu in hot_users:
         try:
-            hu['username'] = User.objects.get(id=hu['user_id']).username
-            hu['avatar'] = Profile.objects.get(user_id=hu['user_id']).avatar
+            hu.username = User.objects.get(id=hu.user_id).username
+            # hu['avatar'] = Profile.objects.get(user_id=hu['user_id']).avatar
         except Exception as e:
             print(e)
+
+    # hot_users = KnackUser.objects.values('user_id').annotate(num_comments=Count('user_id')).order_by('-num_comments')[:10]
+    # for hu in hot_users:
+    #     try:
+    #         hu['username'] = User.objects.get(id=hu['user_id']).username
+    #         hu['avatar'] = Profile.objects.get(user_id=hu['user_id']).avatar
+    #     except Exception as e:
+    #         print(e)
 
     return locals()

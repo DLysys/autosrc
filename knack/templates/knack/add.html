@@ -88,7 +88,7 @@
               {#  },#}
               success: function(data) {
                   if(data.status == 'success'){
-                      alert("提交成功");
+                      alert("提交成功，新增5个积分！");
                       window.location.reload();//刷新当前页面.
                   }else if(data.status == 'fail'){
                       $('#jsCompanyTips').html(data.msg)

@@ -57,3 +57,4 @@ django-cors-headers==2.4.0
 cairocffi
 uwsgi
 scrapy_djangoitem
+django-suit

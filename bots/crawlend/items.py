@@ -1,4 +1,3 @@
-import scrapy
 from scrapy_djangoitem import DjangoItem
 from spider_knack.models import TestScrapy
 

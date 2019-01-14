@@ -9,6 +9,7 @@ from django.http import Http404
 from utils.visit_info import change_info
 from django.contrib import messages
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 
 
 @csrf_exempt
@@ -17,6 +18,9 @@ def index(request):
 
     ks = models.Knack.objects.order_by('-id')
     types = models.Knack.type_choice
+    paginator = Paginator(ks, 15)
+    page = request.GET.get('page')
+    pks = paginator.get_page(page)
 
     return render(request, 'knack/index.html', locals())
 
@@ -40,6 +44,9 @@ def knack_category(request, category_id):
 def knack_type(request, type):
     ks = models.Knack.objects.filter(type=type)
     types = models.Knack.type_choice
+    paginator = Paginator(ks, 15)
+    page = request.GET.get('page')
+    pks = paginator.get_page(page)
 
     return render(request, 'knack/index.html', locals())
 
@@ -50,7 +57,13 @@ def knack_comment(request):
         content = request.POST.get('content')
         knack_id = request.POST.get('knack_id')
         try:
+            user_profile = models.Profile.objects.get(user=request.user)
+        except Exception as e:
+            print(e)
+        try:
             models.KnackUser.objects.create(comment=content, knack_id=knack_id, user=request.user)
+            user_profile.point = int(user_profile.point) + 1
+            user_profile.save()
             return HttpResponse('{"status":"success"}', content_type='application/json')
         except Exception as e:
             return HttpResponse('{"status":"fail"}', content_type='application/json')
@@ -60,6 +73,10 @@ def knack_comment(request):
 @login_required
 def knack_add(request):
     types = models.Knack.type_choice
+    try:
+        user_profile = models.Profile.objects.get(user=request.user)
+    except Exception as e:
+        print(e)
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
@@ -69,6 +86,8 @@ def knack_add(request):
         try:
             models.Knack.objects.create(title=title, content=content, author_id=request.user.id,
                                         k_category_id=category, type=type)
+            user_profile.point = int(user_profile.point) + 5
+            user_profile.save()
             return HttpResponse('{"status":"success"}', content_type='application/json')
         except Exception as e:
             print(e)

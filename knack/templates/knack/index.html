@@ -6,7 +6,7 @@
     <div class="layui-col-md8">
         <div class="fly-panel" style="margin-bottom: 0;">
             <ul class="fly-list">
-            {% for k in ks %}
+            {% for k in pks %}
                 <li>
                     <a href="{% url 'users:user_home' k.author_id %}" class="fly-avatar">
                         {% if k.author.profile.avatar %}
@@ -29,7 +29,7 @@
                       </a>
                       <span>{{ k.c_time|date:"Y-m-j G:i" }}</span>
 
-        {#              <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>#}
+{#                      <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>#}
                       <!--<span class="layui-badge fly-badge-accept layui-hide-xs">已结</span>-->
                       <span class="fly-list-nums">
                         <i class="iconfont icon-pinglun1" title="评论"></i>{{ k.knackuser_set.all|length }}
@@ -41,10 +41,31 @@
                 </li>
             {% endfor %}
         </ul>
-        <div style="text-align: center">
-          <div class="laypage-main">
-            <a href="" class="laypage-next">更多</a>
-          </div>
+{#        <div style="text-align: center">#}
+{#          <div class="laypage-main">#}
+{#              {% if pks.has_next %}#}
+{#                <a href="?page={{ pks.next_page_number }}" class="laypage-next">查看更多</a>#}
+{#              {% endif %}#}
+{#          </div>#}
+{#        </div>#}
+        <div style="border-top: 1px dotted #e2e2e2; text-align: center;">
+            <div class="laypage-main">
+                {% if pks.has_previous %}
+                        <a href="?page=1" class="laypage-prev">第一页</a>
+
+                        <a href="?page={{ pks.previous_page_number }}">上一页</a>
+                {% endif %}
+
+                <span class="current">
+                        第 {{ pks.number }}页 | 共 {{ pks.paginator.num_pages }}页
+                </span>
+
+                {% if pks.has_next %}
+                        <a href="?page={{ pks.next_page_number }}" class="laypage-next">下一页</a>
+
+                        <a href="?page={{ pks.paginator.num_pages }}" class="laypage-last">最后一页</a>
+                {% endif %}
+            </div>
         </div>
       </div>
     </div>

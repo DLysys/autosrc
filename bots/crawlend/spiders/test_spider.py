@@ -1,10 +1,11 @@
-import scrapy
+from scrapy.spider import CrawlSpider
 from bots.crawlend.items import CrawlendItem
+import scrapy
 
 
-class TestSpider(scrapy.Spider):
-    name = "test_spider"
-    start_urls = [ 'http://quotes.toscrape.com/tag/humor/', ]
+class TestSpider(CrawlSpider):
+    name = "spider"
+    start_urls = ['http://quotes.toscrape.com/tag/humor/']
 
     def parse(self, response):
         for quote in response.css('div.quote'):

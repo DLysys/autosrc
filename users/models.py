@@ -25,6 +25,7 @@ class Profile(models.Model):
     lock_time = models.DateTimeField(u'锁定时间', default=timezone.now)
     email = models.EmailField('邮箱', null=True, blank=True)
     avatar = models.FileField(upload_to='avatar', default=None)
+    point = models.IntegerField(u'积分', default=0)
 
     def __str__(self):
         return self.user
