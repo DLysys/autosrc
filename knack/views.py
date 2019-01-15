@@ -137,6 +137,9 @@ def knack_edit(request, knack_id):
 def knack_search(request):
     q = request.GET.get('q')
     ks = models.Knack.objects.filter(title__icontains=q)
+    paginator = Paginator(ks, 15)
+    page = request.GET.get('page')
+    pks = paginator.get_page(page)
 
     return render(request, 'knack/index.html', locals())
 
@@ -153,7 +156,7 @@ def category(request, pk):
     except models.Category.DoesNotExist:  # 读取分类，如果不存在，则引发错误，并404
         raise Http404
 
-    ks = cate.c.all() ## 获取分类下的所有文章
+    ks = cate.c.all()  ## 获取分类下的所有文章
     # return render_to_response('blog/index.html', ## 使用首页的文章列表模版，但加入了的一个`is_category`开关
     #     {"posts": posts,
     #     "is_category": True,

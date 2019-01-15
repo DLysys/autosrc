@@ -58,7 +58,7 @@ class Category(models.Model):
 
 
 class KnackUser(models.Model):
-    """ 资产端口&漏洞的 m2m 中间表 """
+    """ 窍门和用户的关系表 """
 
     support_choice = (
         (1, '顶'),
@@ -70,10 +70,6 @@ class KnackUser(models.Model):
     support = models.IntegerField(choices=support_choice, default=None, blank=True, null=True)
     comment = models.TextField(verbose_name='评论', default=None)
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
-
-    # fix_action = models.TextField('处理记录【如忽略，请说明原因!】', null=True)
-    # fix_status = models.CharField('修复状态', max_length=30, default='wait', choices=VULN_STATUS)
-    # update_data = models.DateTimeField('修复时间', auto_now=True)
 
     class Meta:
         verbose_name = '支持对应用户的中间表'
