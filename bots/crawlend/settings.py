@@ -2,8 +2,8 @@ import os
 import django
 import sys
 
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# sys.path.append(BASE_DIR)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(BASE_DIR)
 
 BOT_NAME = 'crawlend'
 SPIDER_MODULES = ['crawlend.spiders']

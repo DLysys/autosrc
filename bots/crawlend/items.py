@@ -1,9 +1,9 @@
 from scrapy_djangoitem import DjangoItem
-from spider_knack.models import TestScrapy
+from knack.models import Knack
 
 
 class CrawlendItem(DjangoItem):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    django_model = TestScrapy
+    django_model = Knack
 

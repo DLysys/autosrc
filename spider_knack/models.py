@@ -2,7 +2,7 @@ from django.db import models
 
 
 class TestScrapy(models.Model):
-    text = models.CharField(max_length=250)
+    title = models.CharField(max_length=250)
     author = models.CharField(max_length=255)
 
     # class Meta:

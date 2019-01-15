@@ -23,6 +23,7 @@ class Knack(models.Model):
     content = models.TextField(verbose_name='内容', default='')
     type = models.CharField(choices=type_choice, max_length=20, default='', verbose_name="类型")
     support = models.IntegerField(default=0, verbose_name='点赞数')
+    url = models.CharField(verbose_name='采集URL', max_length=200, default='')
 
     def __str__(self):
         return self.title
