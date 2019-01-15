@@ -10,11 +10,7 @@
   <meta name="description" content="窍门">
   <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}">
   <link rel="stylesheet" href="{% static 'css/global.css' %}">
-    <style type="text/css">
-        p{
-            text-indent:2em;    /*每个P段落，首行空出两个空格，即缩进两个字符*/
-        }
-    </style>
+    {% block css %}{% endblock %}
 </head>
 <body>
 

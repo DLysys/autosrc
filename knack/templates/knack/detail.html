@@ -2,6 +2,14 @@
 
 {% block title %}详细{% endblock %}
 
+ {% block css %}
+     <style type="text/css">
+        p{
+            text-indent:2em;    /*每个P段落，首行空出两个空格，即缩进两个字符*/
+        }
+    </style>
+ {% endblock %}
+
 {% block content %}
     <div class="layui-col-md8 content detail">
       <div class="fly-panel detail-box">
