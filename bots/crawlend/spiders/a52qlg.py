@@ -33,6 +33,7 @@ class A52qlgSpider(scrapy.Spider):
                 Knack.objects.create(title=title, author_id=1, type='share', k_category_id=1, url=url, content=content)
 
         pages = res.find('div', {'class': 'page'}).find_all('a')
+
         for page in pages:
             if page.get_text() == '下一页':
                 next_page_url = self.root_url + page['href']
