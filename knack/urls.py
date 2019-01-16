@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^category/(?P<category_id>[0-9]+)/$', views.knack_category, name="knack_category"),
     url(r'^add/$', views.knack_add, name="knack_add"),
     url(r'^edit/(?P<knack_id>[0-9]+)$', views.knack_edit, name="knack_edit"),
-
     url(r'^search/$', views.knack_search, name="knack_search"),
+    url(r'^about$', views.about, name="about"),
 
 ]

@@ -164,3 +164,8 @@ def category(request, pk):
     #     "categories": Category.objects.all()},
     # context_instance=RequestContext(request))
 
+
+@csrf_exempt
+def about(request):
+
+    return render(request, 'knack/about.html', locals())
