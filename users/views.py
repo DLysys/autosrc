@@ -16,6 +16,7 @@ from django.contrib.auth.models import User
 from users.models import Profile
 from django.contrib.auth.hashers import make_password
 from knack.models import Knack
+from utils.notice import WeChatPub
 
 
 @csrf_exempt
@@ -39,6 +40,9 @@ def register(request):
                 user = User.objects.create(email=email, username=username, password=make_password(passwd))
                 user.save()
                 errors = '注册成功！'
+                wechat = WeChatPub()
+                content = "<div class=\"normal\">新用户注册成功，邮箱名：%s </div>" % email
+                wechat.send_msg(content)
 
     return render(request, 'register.html', locals())
 
