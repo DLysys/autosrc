@@ -10,7 +10,6 @@ class WeChatPub:
         corpid = "ww017cf2cf5939e40b"
         secret = "hpo-V_S5AePKBXJAAFqWBHBU-jfi-XhQ0pDZ6BdxoGo"
         self.token = self.get_token(corpid, secret)
-        print("token is " + self.token)
 
     def get_token(self, corpid, secret):
         url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={0}&corpsecret={1}".format(corpid, secret)
@@ -25,7 +24,7 @@ class WeChatPub:
             print("request failed.")
             return None
 
-    def send_msg(self, content):
+    def send_msg(self, title, content):
         url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + self.token
         header = {
             "Content-Type": "application/json"
@@ -37,10 +36,10 @@ class WeChatPub:
             "msgtype": "textcard",
             "agentid": 1000002,
             "textcard": {
-                "title": "新用户注册成功通知",
+                "title": title,
                 "description": content,
-                "url": "URL",
-                "btntxt": "更多"
+                # "url": "URL",
+                # "btntxt": "更多"
             },
             "safe": 0
         }

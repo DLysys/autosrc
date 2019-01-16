@@ -41,8 +41,9 @@ def register(request):
                 user.save()
                 errors = '注册成功！'
                 wechat = WeChatPub()
+                title = '新用户注册成功通知'
                 content = "<div class=\"normal\">新用户注册成功，邮箱名：%s </div>" % email
-                wechat.send_msg(content)
+                wechat.send_msg(title, content)
 
     return render(request, 'register.html', locals())
 
