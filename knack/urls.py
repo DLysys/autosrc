@@ -14,5 +14,7 @@ urlpatterns = [
     url(r'^search/$', views.knack_search, name="knack_search"),
     url(r'^about$', views.about, name="about"),
     url(r'^google7c5c39bd4748d567.html$', views.google_search, name="google_search"),
+    url(r'^baidu_verify_Z85YzIi6cp.html$', views.baidu_search, name="baidu_search"),
+
 
 ]

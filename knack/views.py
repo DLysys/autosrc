@@ -175,3 +175,10 @@ def about(request):
 def google_search(request):
 
     return render(request, 'knack/google7c5c39bd4748d567.html', locals())
+
+
+@csrf_exempt
+def baidu_search(request):
+
+    return render(request, 'knack/baidu_verify_Z85YzIi6cp.html', locals())
+
