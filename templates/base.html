@@ -17,7 +17,7 @@
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
     <a class="fly-logo" href="/">
-      <img src="{% static 'images/logo.png' %}" alt="layui" style="width: 100px; height: 45px">
+      <img src="{% static 'images/logo.png' %}" alt="找窍门logo" style="width: 100px; height: 45px">
     </a>
     <ul class="layui-nav fly-nav layui-hide-xs">
       <li class="layui-nav-item layui-this">
@@ -41,9 +41,9 @@
 {#              <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>#}
 {#              <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>#}
                 {% if user.profile.avatar %}
-                    <img src="/media/{{ user.profile.avatar }}">
+                    <img src="/media/{{ user.profile.avatar }}" alt="用户头像">
                 {% else %}
-                    <img src="/media/avatar/default.png">
+                    <img src="/media/avatar/default.png" alt="默认头像">
                 {% endif %}
             </a>
             <dl class="layui-nav-child">
