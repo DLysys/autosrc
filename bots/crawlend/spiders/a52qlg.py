@@ -6,7 +6,7 @@ import requests
 
 
 class A52qlgSpider(scrapy.Spider):
-    name = 'spider'
+    name = '52qlg'
     allowed_domains = ['52qlg.com']
     root_url = 'http://www.52qlg.com/list/'
     start_urls = ['http://www.52qlg.com/list/list_2_1.html']

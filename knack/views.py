@@ -169,3 +169,9 @@ def category(request, pk):
 def about(request):
 
     return render(request, 'knack/about.html', locals())
+
+
+@csrf_exempt
+def google_search(request):
+
+    return render(request, 'knack/googlee7d18a466878ce19.html', locals())
