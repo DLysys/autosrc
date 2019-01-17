@@ -75,6 +75,7 @@ class KnackUser(models.Model):
     support = models.IntegerField(choices=support_choice, default=None, blank=True, null=True)
     comment = models.TextField(verbose_name='评论', default=None)
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    collect = models.BooleanField(db_column='collect', default=False)
 
     class Meta:
         verbose_name = '支持对应用户的中间表'

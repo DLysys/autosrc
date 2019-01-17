@@ -47,7 +47,12 @@
             <span>{{ k.c_time|date:"Y-m-j G:i" }}</span>
           </div>
           <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
-            <span style="padding-right: 10px; color: #FF7200"></span>
+{#            <span style="padding-right: 10px; color: #FF7200"></span>#}
+              {% if res.collect %}
+                <span class="layui-btn layui-btn-xs jie-admin layui-btn-danger" type="collect" data-type="add" id="uncollect">取消收藏</span>
+              {% else %}
+                <span class="layui-btn layui-btn-xs jie-admin" type="collect" data-type="add" id="collect">收藏</span>
+              {% endif %}
 {#            <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a href="">编辑此贴</a></span>#}
           </div>
         </div>

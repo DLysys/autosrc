@@ -11,6 +11,7 @@ class ProfileInline(admin.StackedInline):
 
 class ProfileAdmin(admin.ModelAdmin):
     inlines = (ProfileInline,)
+    list_display = ['email', 'username', 'last_login']
 
 
 admin.site.unregister(User)  # 去掉在admin中的注册
