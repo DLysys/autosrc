@@ -13,6 +13,6 @@ urlpatterns = [
     url(r'^edit/(?P<knack_id>[0-9]+)$', views.knack_edit, name="knack_edit"),
     url(r'^search/$', views.knack_search, name="knack_search"),
     url(r'^about$', views.about, name="about"),
-    url(r'^google(.*).html$', views.google_search, name="google_search"),
+    url(r'^google7c5c39bd4748d567.html$', views.google_search, name="google_search"),
 
 ]
