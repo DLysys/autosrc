@@ -174,4 +174,4 @@ def about(request):
 @csrf_exempt
 def google_search(request):
 
-    return render(request, 'knack/googlee7d18a466878ce19.html', locals())
+    return render(request, 'knack/google7c5c39bd4748d567.html', locals())
