@@ -1,11 +1,10 @@
-from django.contrib import admin
 from . import models
 from django.contrib import admin
 from django.contrib.auth.models import User
 
 
-# Register your models here.
-class ProfileInline(admin.StackedInline):  # 将UserProfile加入到Admin的user表中
+class ProfileInline(admin.StackedInline):
+    # 将UserProfile加入到Admin的user表中
     model = models.Profile
     verbose_name = 'profile'
 

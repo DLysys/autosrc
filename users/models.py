@@ -28,7 +28,7 @@ class Profile(models.Model):
     point = models.IntegerField(u'积分', default=0)
 
     def __str__(self):
-        return self.user
+        return self.user.email
 
     class Meta:
         verbose_name = '用户信息'
