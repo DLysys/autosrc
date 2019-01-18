@@ -237,5 +237,55 @@
         })
         });
     </script>
+
+    {#    收藏#}
+    <script>
+        $('#collect').click(function(){
+        $.ajax({
+            url: '{% url 'knack:knack_collect' %}',
+            data: {'knack_id': {{ knack_id }}, 'action': 'collect'},
+            type: 'post',
+            dataType: 'json',
+            {#contentType: 'application/json; charset=utf-8',#}
+            success: function(data) {
+                  if(data.status == 'success'){
+                      window.location.reload();//刷新当前页面.
+                  }else if(data.status == 'fail'){
+                      $('#jsCompanyTips').html(data.msg)
+                      alert("提交失败！");
+                  }
+                  else if(data.status == 'error'){
+                      $('#jsCompanyTips').html(data.msg)
+                      alert("提交失败，不能评价自己发布的窍门！");
+                  }
+              },
+        })
+        });
+    </script>
+
+    {#    取消收藏#}
+    <script>
+        $('#uncollect').click(function(){
+        $.ajax({
+            url: '{% url 'knack:knack_collect' %}',
+            data: {'knack_id': {{ knack_id }}, 'action': 'uncollect'},
+            type: 'post',
+            dataType: 'json',
+            {#contentType: 'application/json; charset=utf-8',#}
+            success: function(data) {
+                  if(data.status == 'success'){
+                      window.location.reload();//刷新当前页面.
+                  }else if(data.status == 'fail'){
+                      $('#jsCompanyTips').html(data.msg)
+                      alert("提交失败！");
+                  }
+                  else if(data.status == 'error'){
+                      $('#jsCompanyTips').html(data.msg)
+                      alert("提交失败，不能评价自己发布的窍门！");
+                  }
+              },
+        })
+        });
+    </script>
 {% endblock %}
 

@@ -108,11 +108,6 @@ def knack_add(request):
 @csrf_exempt
 @login_required
 def knack_support(request):
-    types = models.Knack.type_choice
-    try:
-        user_profile = models.Profile.objects.get(user=request.user)
-    except Exception as e:
-        print(e)
     if request.method == 'POST':
         knack_id = request.POST.get('knack_id')
         action = request.POST.get('action')
@@ -144,7 +139,35 @@ def knack_support(request):
                     return HttpResponse('{"status":"fail"}', content_type='application/json')
         else:
             return HttpResponse('{"status":"error"}', content_type='application/json')
+    else:
+        return render(request, 'knack/detail.html', locals())
 
+
+@csrf_exempt
+@login_required
+def knack_collect(request):
+    types = models.Knack.type_choice
+    try:
+        user_profile = models.Profile.objects.get(user=request.user)
+    except Exception as e:
+        print(e)
+    if request.method == 'POST':
+        knack_id = request.POST.get('knack_id')
+        action = request.POST.get('action')
+        if action == 'collect':
+            try:
+                models.KnackUser.objects.update_or_create(knack_id=knack_id, user_id=request.user.id, defaults={'collect': True})
+                return HttpResponse('{"status":"success"}', content_type='application/json')
+            except Exception as e:
+                print(e)
+                return HttpResponse('{"status":"fail"}', content_type='application/json')
+        else:
+            try:
+                models.KnackUser.objects.update_or_create(knack_id=knack_id, user_id=request.user.id, defaults={'collect': False})
+                return HttpResponse('{"status":"success"}', content_type='application/json')
+            except Exception as e:
+                print(e)
+                return HttpResponse('{"status":"fail"}', content_type='application/json')
     else:
         return render(request, 'knack/detail.html', locals())
 
