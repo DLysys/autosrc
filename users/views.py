@@ -85,6 +85,71 @@ def login_site(request):
     return render(request, 'login.html', locals())
 
 
+@csrf_protect
+def find_pass(request):
+    error = ''
+    if request.method == 'POST':
+        if request.method == 'POST':
+            form = forms.ResetpsdRequestForm(request.POST)
+            if form.is_valid():
+                email = form.cleaned_data['email']
+                user = get_object_or_404(User, email=email)
+                if user:
+                    hash_res = hashlib.md5()
+                    hash_res.update(make_password(email).encode('utf-8'))
+                    urlarg = hash_res.hexdigest()
+                    models.UserResetpsd.objects.get_or_create(
+                        email=email,
+                        urlarg=urlarg
+                    )
+                    res = mails.sendresetpsdmail(email, urlarg)
+                    if res:
+                        error = '申请已发送，请检查邮件通知，请注意检查邮箱'
+                    else:
+                        error = '重置邮件发送失败，请重试'
+                else:
+                    error = '请检查信息是否正确'
+            else:
+                error = '请检查输入'
+        else:
+            form = forms.ResetpsdRequestForm()
+        return render(request, 'RBAC/resetpsdquest.html', {'form': form, 'error': error})
+    else:
+        return render(request, 'forget.html')
+        # resetpsd = get_object_or_404(models.UserResetpsd,)
+        # if resetpsd:
+        #     email_get = resetpsd.email
+        #     if request.method == 'POST':
+        #         form = forms.ResetpsdForm(request.POST)
+        #         if form.is_valid():
+        #             email = form.cleaned_data['email']
+        #             password = form.cleaned_data['password']
+        #             repassword = form.cleaned_data['repassword']
+        #             if checkpsd(password):
+        #                 if password == repassword:
+        #                     if email_get == email:
+        #                         user = get_object_or_404(User, email=email)
+        #                         if user:
+        #                             user.set_password(password)
+        #                             user.save()
+        #                             resetpsd.delete()
+        #                             return HttpResponseRedirect('/view/')
+        #
+        #                         else:
+        #                             error = '用户信息有误'
+        #                     else:
+        #                         error = '用户邮箱不匹配'
+        #                 else:
+        #                     error = '两次密码不一致'
+        #             else:
+        #                 error = '密码必须6位以上且包含字母、数字'
+        #         else:
+        #             error = '请检查输入'
+        #     else:
+        #         form = forms.ResetpsdForm()
+        #     return render(request, 'RBAC/resetpsd.html', {'form': form, 'error': error, 'title': '重置'})
+
+
 @login_required
 def logout_site(request):
     logout(request)
@@ -150,31 +215,6 @@ def user_set(request):
     用户配置
     """
     return render(request, 'set.html')
-
-
-@login_required
-@csrf_protect
-def userlist(request):
-    user = request.user
-    error = ''
-    if user.is_superuser:
-        area = models.Area.objects.filter(parent__isnull=True)
-        city = models.Area.objects.filter(parent__isnull=False)
-        return render(request, 'userlist.html', locals())
-    else:
-        error = '权限错误'
-    return render(request, 'errors/error.html', locals())
-
-
-@login_required
-@csrf_protect
-def user_list_manage(request):
-    user = request.user
-    if user.is_superuser:
-        ulists = User.objects.order_by('-last_login')
-    else:
-        ulists = User.objects.filter(profile__parent_email=user.email, email=user.email).order_by('-is_superuser', '-date_joined')
-    return render(request, "userlist.html", locals())
 
 
 @login_required
