@@ -29,7 +29,7 @@ class A52qlgSpider(scrapy.Spider):
             try:
                 Book.objects.get(url=url)
             except:
-                Book.objects.create(title=title, author_id=1, type='share', k_category_id=1, url=url, content=content)
+                Book.objects.create(title=title, author_id=1, type='share', b_category_id=1, url=url, content=content)
 
         pages = res.find('div', {'class': 'page'}).find_all('a')
 
