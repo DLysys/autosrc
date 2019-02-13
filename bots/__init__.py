@@ -1,7 +1,7 @@
 def setup_django_env():
     import os
     import django
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "knack.KnackProject.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bodhi.ProjectSettings.settings")
     django.setup()
 
 

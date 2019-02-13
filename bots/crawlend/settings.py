@@ -9,7 +9,7 @@ BOT_NAME = 'crawlend'
 SPIDER_MODULES = ['crawlend.spiders']
 NEWSPIDER_MODULE = 'crawlend.spiders'
 
-os.environ["DJANGO_SETTINGS_MODULE"] = "KnackProject.settings"
+os.environ["DJANGO_SETTINGS_MODULE"] = "ProjectSettings.settings"
 django.setup()
 
 ROBOTSTXT_OBEY = False

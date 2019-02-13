@@ -1,4 +1,4 @@
-from knack.models import VisitNumber, UserIp, DayNumber
+from apps.books.models import VisitNumber, UserIp, DayNumber
 from django.utils import timezone
 
 

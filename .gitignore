@@ -5,4 +5,4 @@
 # IntelliJ project files
 .idea
 *.iml
-KnackProject/settings.py
+ProjectSettings/settings.py

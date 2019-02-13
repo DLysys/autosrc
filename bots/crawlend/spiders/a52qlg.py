@@ -1,7 +1,6 @@
 import scrapy
 from bs4 import BeautifulSoup
-from bots.crawlend.items import CrawlendItem
-from knack.models import Knack
+from apps.books.models import Book
 import requests
 
 
@@ -28,9 +27,9 @@ class A52qlgSpider(scrapy.Spider):
             poz = content.index('上一篇')
             content = content[:poz]
             try:
-                Knack.objects.get(url=url)
+                Book.objects.get(url=url)
             except:
-                Knack.objects.create(title=title, author_id=1, type='share', k_category_id=1, url=url, content=content)
+                Book.objects.create(title=title, author_id=1, type='share', k_category_id=1, url=url, content=content)
 
         pages = res.find('div', {'class': 'page'}).find_all('a')
 
