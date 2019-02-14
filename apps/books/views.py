@@ -27,13 +27,24 @@ def book_detail(request, book_id):
     try:
         book = models.Book.objects.get(id=book_id)
         res = models.BookUser.objects.get(book_id=book_id, user_id=request.user)
+        comments = models.BookUser.objects.filter(book_id=book_id).exclude(comment=None)
     except Exception as e:
         print(e)
-    return render(request, 'book/detail.html', locals())
+    return render(request, 'book/book_detail.html', locals())
+
+
+@csrf_exempt
+def author_detail(request, author_id):
+    try:
+        author = models.Author.objects.get(id=author_id)
+        # res = models.BookUser.objects.get(book_id=author_id, user_id=request.user)
+    except Exception as e:
+        print(e)
+    return render(request, 'book/author_detail.html', locals())
 
 
 def boob_category(request, category_id):
-    ks = models.book.objects.filter(b_category_id=category_id)
+    ks = models.Book.objects.filter(b_category_id=category_id)
 
     return render(request, 'book/index.html', locals())
 
@@ -53,20 +64,20 @@ def book_comment(request):
     if request.method == 'POST':
         content = request.POST.get('content')
         book_id = request.POST.get('book_id')
-        try:
-            k = models.Book.objects.get(id=book_id)
-            if k.author == request.user:
-                return HttpResponse('{"status":"error"}', content_type='application/json')
-            else:
-                pass
-        except Exception as e:
-            print(e)
+        # try:
+        #     book = models.Book.objects.get(id=book_id)
+        #     if k.author == request.user:
+        #         return HttpResponse('{"status":"error"}', content_type='application/json')
+        #     else:
+        #         pass
+        # except Exception as e:
+        #     print(e)
         try:
             user_profile = Profile.objects.get(user=request.user)
         except Exception as e:
             print(e)
         try:
-            models.BookUser.objects.create(comment=content, book_id=book_id, user=request.user)
+            models.BookUser.objects.update_or_create(book_id=book_id, user=request.user, defaults={'comment': content})
             user_profile.point = int(user_profile.point) + 1
             user_profile.save()
             return HttpResponse('{"status":"success"}', content_type='application/json')
@@ -136,13 +147,13 @@ def book_support(request):
         else:
             return HttpResponse('{"status":"error"}', content_type='application/json')
     else:
-        return render(request, 'book/detail.html', locals())
+        return render(request, 'book/book_detail.html', locals())
 
 
 @csrf_exempt
 @login_required
 def book_collect(request):
-    types = models.Book.type_choice
+    # types = models.Book.type_choice
     try:
         user_profile = Profile.objects.get(user=request.user)
     except Exception as e:
@@ -165,7 +176,7 @@ def book_collect(request):
                 print(e)
                 return HttpResponse('{"status":"fail"}', content_type='application/json')
     else:
-        return render(request, 'book/detail.html', locals())
+        return render(request, 'book/book_detail.html', locals())
 
 
 @csrf_exempt

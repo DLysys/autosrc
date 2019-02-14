@@ -18,9 +18,9 @@ class Book(models.Model):
 
     title = models.CharField(max_length=100, default='', verbose_name="书籍名称")
     desc = models.CharField(max_length=255, default='', verbose_name="简介")
-    b_category = models.ForeignKey('Category', null=True, blank=True, verbose_name='分类', on_delete=models.CASCADE, related_name='b_category')
+    category = models.ForeignKey('Category', null=True, blank=True, verbose_name='分类', on_delete=models.CASCADE, related_name='b_category')
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
-    book_author = models.ForeignKey('Author', null=True, blank=True, verbose_name='作者', on_delete=models.CASCADE, related_name='book_author')
+    author = models.ForeignKey('Author', null=True, blank=True, verbose_name='作者', on_delete=models.CASCADE, related_name='book_author')
     support = models.IntegerField(default=0, verbose_name='点赞数')
 
     # content = models.TextField(verbose_name='内容', default='')
@@ -91,8 +91,8 @@ class Author(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = '分类'
-        verbose_name_plural = "分类"
+        verbose_name = '作者'
+        verbose_name_plural = "作者"
 
 
 class BookUser(models.Model):
@@ -106,7 +106,7 @@ class BookUser(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     support = models.IntegerField(choices=support_choice, default=None, blank=True, null=True)
-    comment = models.TextField(verbose_name='评论', default=None)
+    comment = models.TextField(verbose_name='评论', default=None, null=True)
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     collect = models.BooleanField(db_column='collect', default=False)
 

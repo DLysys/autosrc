@@ -3,9 +3,9 @@ from .models import Book, Category, Chapter, Author
 
 
 class BookAdmin(admin.ModelAdmin):
-    list_display = ['title', 'book_author', 'c_time', 'b_category']
-    list_filter = ['title', 'book_author', 'b_category']
-    search_fields = ('title', 'book_author', 'b_category',)
+    list_display = ['title', 'author', 'c_time', 'category']
+    list_filter = ['title', 'author', 'category']
+    search_fields = ('title', 'author', 'category',)
 
 
 class ChapterAdmin(admin.ModelAdmin):

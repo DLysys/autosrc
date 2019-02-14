@@ -8,26 +8,28 @@
             <ul class="fly-list">
             {% for b in pbooks %}
                 <li>
-{#                    <a href="{% url 'users:user_home' b.book_author %}" class="fly-avatar">#}
+                    <a href="{% url 'users:user_home' b.author.id %}" class="fly-avatar">
                         {% if b.author.profile.avatar %}
-{#                            <img src="/media/{{ b.author.profile.avatar }}" alt="">#}
+                            <img src="/media/{{ b.author.profile.avatar }}" alt="">
                         {% else %}
-{#                            <img src="/media/avatar/default.png">#}
+                            <img src="/media/avatar/default.png">
                         {% endif %}
                     </a>
                     <h2>
-                      <a class="layui-badge">{{ b.get_type_display }}</a>
                         <a href="{% url 'books:book_detail' b.id %}">{{ b.title }}</a>
                     </h2>
                     <div class="fly-list-info">
+                        <a class="layui-badge">{{ b.category }}</a>
+
 {#                      <a href="{% url 'users:user_home' b.author_id %}" link>#}
-                        <cite>{{ k.author }}</cite>
+                        <cite>{{ b.author }}</cite>
+
                         <!--
                         <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
                         <i class="layui-badge fly-badge-vip">VIP3</i>
                         -->
-                      </a>
-                      <span>{{ k.c_time|date:"Y-m-j G:i" }}</span>
+{#                      </a>#}
+                      <span>{{ b.c_time|date:"Y-m-j G:i" }}</span>
 
 {#                      <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>#}
                       <!--<span class="layui-badge fly-badge-accept layui-hide-xs">已结</span>-->

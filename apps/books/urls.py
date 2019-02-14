@@ -5,7 +5,9 @@ app_name = 'books'
 
 urlpatterns = [
     url(r'^$', views.index, name="index"),
-    url(r'^detail/(?P<book_id>[0-9]+)/$', views.book_detail, name="book_detail"),
+    url(r'^book/(?P<book_id>[0-9]+)/$', views.book_detail, name="book_detail"),
+    url(r'^author/(?P<author_id>[0-9]+)/$', views.author_detail, name="author_detail"),
+
     url(r'^comment/$', views.book_comment, name="book_comment"),
     url(r'^type/(?P<type>.*)/$', views.book_type, name="book_type"),
     url(r'^category/(?P<category_id>[0-9]+)/$', views.boob_category, name="boob_category"),
