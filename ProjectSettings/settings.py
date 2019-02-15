@@ -1,5 +1,6 @@
 import os
 import sys
+from .local import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
@@ -65,7 +66,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bodhi',
         'USER': 'root',
-        'PASSWORD': 'Bitsec1@',
+        'PASSWORD': DB_PASS,
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'OPTIONS': {

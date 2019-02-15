@@ -5,4 +5,4 @@
 # IntelliJ project files
 .idea
 *.iml
-ProjectSettings/settings.py
+ProjectSettings/local.py
