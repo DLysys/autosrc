@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'apps.users',
     # 'spider_book',
     'django.contrib.sitemaps',
+    'captcha',
+    
 ]
 
 MIDDLEWARE = [

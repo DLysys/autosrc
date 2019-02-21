@@ -6,6 +6,8 @@ certifi==2018.1.18
 cffi==1.11.5
 chardet==3.0.4
 cssselect2==0.2.1
+django
+django-simple-captcha
 defusedxml==0.5.0
 django-crontab==0.7.1
 django-haystack==2.8.1
@@ -35,7 +37,6 @@ pyOpenSSL
 python-docx
 scrapy
 scrapy_splash
-django==2.0.2
 django-crispy-forms>=1.6.0
 django-reversion>=2.0.0
 django-formtools==2.1
@@ -50,4 +51,3 @@ django-cors-headers==2.4.0
 cairocffi
 uwsgi
 scrapy_djangoitem
-django-suit==2.0

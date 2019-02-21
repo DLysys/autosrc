@@ -18,6 +18,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^', include('apps.books.urls', namespace='books')),
     url(r'^user/', include('apps.users.urls', namespace='users')),
+    url(r'^captcha', include('captcha.urls')),
+
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
         name='django.contrib.sitemaps.views.sitemap'),

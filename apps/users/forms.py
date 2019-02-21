@@ -2,11 +2,13 @@ from django import forms
 from apps.users import models
 from django.forms import ModelForm
 from django.forms import widgets
+from captcha.fields import CaptchaField
 
 
 class SigninForm(forms.Form):
     username = forms.CharField(label='账号', max_length=75, widget=forms.TextInput(attrs={'class': 'layui-input', 'placeholder': '域账号【例 san.zhang】'}))
     password = forms.CharField(label='密码', max_length=25, widget=forms.PasswordInput(attrs={'class': 'layui-input', 'placeholder': '密码'}))
+    captcha = CaptchaField(label='验证码')
 
 
 class Account_Reset_Form(forms.Form):
