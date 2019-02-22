@@ -61,7 +61,7 @@
                 {% for chapter in book.chapter_set.all %}
                     <div class="layui-colla-item">
                       <h2 class="layui-colla-title">{{ chapter.title }}<i class="layui-icon layui-colla-icon"></i></h2>
-                      <div class="layui-colla-content">
+                      <div class="layui-colla-content layui-show">
                           <p>{{ chapter.content|linebreaks }}</p>
                       </div>
                     </div>
