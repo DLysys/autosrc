@@ -6,9 +6,9 @@ from captcha.fields import CaptchaField
 
 
 class SigninForm(forms.Form):
-    username = forms.CharField(label='账号', max_length=75, widget=forms.TextInput(attrs={'class': 'layui-input', 'placeholder': '域账号【例 san.zhang】'}))
-    password = forms.CharField(label='密码', max_length=25, widget=forms.PasswordInput(attrs={'class': 'layui-input', 'placeholder': '密码'}))
-    captcha = CaptchaField(label='验证码')
+    username = forms.CharField(label='邮箱', max_length=75, widget=forms.TextInput(attrs={'class': 'layui-input', 'placeholder': ''}))
+    password = forms.CharField(label='密码', max_length=25, widget=forms.PasswordInput(attrs={'class': 'layui-input', 'placeholder': ''}))
+    captcha = CaptchaField(error_messages={"invalid": u"验证码错误", "required": u"请输入验证码"})
 
 
 class Account_Reset_Form(forms.Form):

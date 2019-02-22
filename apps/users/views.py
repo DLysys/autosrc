@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
+from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, Http404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
@@ -16,6 +16,8 @@ from apps.users.models import Profile
 from django.contrib.auth.hashers import make_password
 from apps.books.models import Book
 from utils.notice import WeChatPub
+from captcha.models import CaptchaStore
+from captcha.helpers import captcha_image_url
 
 
 @csrf_exempt
@@ -47,6 +49,21 @@ def register(request):
     return render(request, 'register.html', locals())
 
 
+def captcha_refresh(request):
+    # 内置的源码
+    if not request.is_ajax():
+        raise Http404
+
+    new_key = CaptchaStore.pick()
+    to_json_response = {
+        'key': new_key,
+        'image_url': captcha_image_url(new_key),
+        # 'audio_url': captcha_audio_url(new_key) if settings.CAPTCHA_FLITE_PATH else None
+    }
+
+    return HttpResponse(json.dumps(to_json_response), content_type='application/json')
+
+
 @csrf_exempt
 def login_site(request):
     def current_user_url(user):
@@ -60,25 +77,35 @@ def login_site(request):
         return next and next or reverse(_url)
 
     if request.method == "POST":
-        email = request.POST.get('email')
-        passwd = request.POST.get('pass')
-        try:
-            username = User.objects.get(email=email)
-        except Exception as e:
-            print(e)
-            username = ''
-            errors = '用户不存在！'
-        user = authenticate(username=username, password=passwd)
-        if user:
-            auth.login(request, user)
-            return HttpResponseRedirect(current_user_url(user))
+        form = forms.SigninForm(request.POST)
+        if form.is_valid():
+            human = True
+            email = form.cleaned_data['username']
+            passwd = form.cleaned_data['password']
+            try:
+                username = User.objects.get(email=email)
+            except Exception as e:
+                print(e)
+                username = ''
+                errors = '用户不存在！'
+            user = authenticate(username=username, password=passwd)
+            if user:
+                auth.login(request, user)
+                return HttpResponseRedirect(current_user_url(user))
+            else:
+                errors = u'登陆失败，邮箱或密码错误！'
         else:
-            errors = u'登陆失败，邮箱或密码错误！'
+            return HttpResponseRedirect(reverse("users:login"))
     else:
         if request.user.is_authenticated:
             url = current_user_url(request.user)
             return HttpResponseRedirect(url)
         else:
+            from captcha.models import CaptchaStore
+            from captcha.helpers import captcha_image_url
+            hashkey = CaptchaStore.generate_key()
+            image_url = captcha_image_url(hashkey)
+
             form = forms.SigninForm()
 
     return render(request, 'login.html', locals())

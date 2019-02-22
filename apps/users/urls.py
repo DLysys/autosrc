@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^login$', views.login_site, name='login'),
     url(r'^findpass$', views.find_pass, name='find_pass'),
     url(r'^captcha', include('captcha.urls')),
-
+    url(r'captcha/refresh/$', views.captcha_refresh, name='captcha_refresh'),
     url(r'^register$', views.register, name='register'),
     url(r'^logout$', views.logout_site, name='logout'),
     url(r'^center$', views.user_center, name='user_center'),
