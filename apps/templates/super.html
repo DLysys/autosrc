@@ -26,7 +26,7 @@
 {#            </div>#}
 {#          </div>#}
           <div class="fly-panel">
-            <h3 class="fly-panel-title">窍门分类</h3>
+            <h3 class="fly-panel-title">书籍分类</h3>
             <ul class="fly-panel-main fly-list-static">
                 {% for cate in cates %}
                   <li>
@@ -36,7 +36,7 @@
             </ul>
           </div>
         <dl class="fly-panel fly-list-one">
-            <dt class="fly-panel-title">最赞窍门</dt>
+            <dt class="fly-panel-title">最热书籍</dt>
             {% for hk in hot_books %}
                 <dd>
                   <a href="{% url 'books:book_detail' hk.book_id %}">{{ hk.title }}</a>
