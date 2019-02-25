@@ -45,7 +45,7 @@
             {% endfor %}
         </dl>
         <dl class="fly-panel fly-list-one">
-            <dt class="fly-panel-title">热议窍门</dt>
+            <dt class="fly-panel-title">热议</dt>
             {% for hk in hot_books %}
                 <dd>
                   <a href="{% url 'books:book_detail' hk.book_id %}">{{ hk.title }}</a>
