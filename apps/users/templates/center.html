@@ -50,17 +50,21 @@
     -->
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
-        <li data-type="mine-jie" lay-id="index" class="layui-this">我发布的窍门（<span>{{ my_books|length }}</span>）</li>
+        <li data-type="mine-jie" lay-id="index" class="layui-this">我的收藏（<span>{{ my_books|length }}</span>）</li>
 {#        <li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖（<span>16</span>）</li>#}
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
         <div class="layui-tab-item layui-show">
           <ul class="mine-view jie-row">
-              {% for mk in my_books %}
+              {% for b in my_books %}
                 <li>
-                  <a class="jie-title" href="{% url 'books:book_detail' mk.id %}" target="_blank">{{ mk.title }}</a>
-                  <i>{{ mk.c_time|date:"Y-m-j G:i" }}</i>
-                  <a class="mine-edit" href="{% url 'books:book_edit' mk.id%}" target="_blank">编辑</a>
+                  <a class="jie-title" href="{% url 'books:book_detail' b.id %}" target="_blank">{{ b.book.title }}</a>
+                  <i>{{ b.c_time|date:"Y-m-j G:i" }}</i>
+                  <a class="mine-edit" href="#" id="uncollect">删除</a>
+                    <input id="book_id" type="hidden" value="{{ b.book_id }}"/>
+            {#            <span style="padding-right: 10px; color: #FF7200"></span>#}
+{#                    <span class="layui-btn layui-btn-xs jie-admin" type="collect" data-type="add" id="uncollect">取消收藏</span>#}
+            {#            <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a href="">编辑此贴</a></span>#}
 {#                  <em>661阅/10答</em>#}
                 </li>
               {% endfor %}
@@ -71,7 +75,8 @@
           <ul class="mine-view jie-row">
             <li>
               <a class="jie-title" href="" target="_blank"></a>
-              <i></i>  </li>
+              <i></i>
+            </li>
           </ul>
           <div id="LAY_page1"></div>
         </div>
@@ -79,4 +84,32 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block js %}
+     {#    取消收藏#}
+    <script>
+        $('#uncollect').click(function(){
+            var book_id = $("#book_id").val();
+        $.ajax({
+            url: '{% url 'books:book_collect' %}',
+            data: {'book_id': book_id, 'action': 'uncollect'},
+            type: 'post',
+            dataType: 'json',
+            {#contentType: 'application/json; charset=utf-8',#}
+            success: function(data) {
+                  if(data.status == 'success'){
+                      window.location.reload();//刷新当前页面.
+                  }else if(data.status == 'fail'){
+                      $('#jsCompanyTips').html(data.msg)
+                      alert("提交失败！");
+                  }
+                  else if(data.status == 'error'){
+                      $('#jsCompanyTips').html(data.msg)
+                      alert("提交失败，不能评价自己发布的窍门！");
+                  }
+              },
+        })
+        });
+    </script>
 {% endblock %}

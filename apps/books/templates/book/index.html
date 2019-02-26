@@ -19,7 +19,7 @@
                         <a href="{% url 'books:book_detail' b.id %}">{{ b.title }}</a>
                     </h2>
                     <div class="fly-list-info">
-                        <a class="layui-badge">{{ b.category }}</a>
+                        <cite>{{ b.category }}</cite>
 
 {#                      <a href="{% url 'users:user_home' b.author_id %}" link>#}
                         <cite>{{ b.author }}</cite>

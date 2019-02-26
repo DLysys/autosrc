@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'^manage/user/disactivate/$', views.user_disactivate, name='userdisactivate'),
     url(r'^manage/userrequest/stop/$', views.user_request_cancle, name='userregiststop'),
     url(r'^img/upload$', views.upload_image, name='img_upload'),
+    url(r'^change/password$', views.change_password, name='change_password'),
 ]

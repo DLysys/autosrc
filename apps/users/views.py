@@ -14,10 +14,11 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from apps.users.models import Profile
 from django.contrib.auth.hashers import make_password
-from apps.books.models import Book
+from apps.books.models import Book, BookUser
 from utils.notice import WeChatPub
 from captcha.models import CaptchaStore
 from captcha.helpers import captcha_image_url
+from django.core.exceptions import ValidationError
 
 
 @csrf_exempt
@@ -227,10 +228,10 @@ def user_home(request, user_id):
 @login_required
 def user_center(request):
     """
-    用户中心
+    用户中心，收藏
     """
     user = request.user
-    my_books = Book.objects.filter(author=user)
+    my_books = BookUser.objects.filter(user=user, collect=True)
 
     return render(request, 'center.html', locals())
 
@@ -301,3 +302,59 @@ def upload_image(request):
             data = {'state': 0}
 
         return JsonResponse(data)
+
+
+@csrf_exempt
+@login_required
+def change_password(request):
+    data = {}
+    data['form_title'] = u'修改密码'
+    data['submit_name'] = u'　确定　'
+
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        nowpass = request.POST.get('nowpass')
+        newpass = request.POST.get('newpass')
+        repass = request.POST.get('repass')
+
+        user = authenticate(email=email, password=nowpass)
+
+        if user is None:
+            return HttpResponse('{"status":"password wrong"}', content_type='application/json')
+        else:
+            if newpass != repass:
+                raise ValidationError(u'两次输入的密码不一致，再输入一次吧')
+            else:
+                if len(newpass) < 8 or len(newpass) > 36:
+                    return HttpResponse('{"status":"password length error"}', content_type='application/json')
+                else:
+                    request.user.set_password(newpass)
+                    request.user.save()
+                    return HttpResponse('{"status":"success"}', content_type='application/json')
+
+                    # # 重新登录
+                    # user = authenticate(username=username, password=pwd)
+                    # if user is not None:
+                    #     login(request, user)
+                    #
+                    # # 页面提示
+                    # data['goto_url'] = reverse('user_info')
+                    # data['goto_time'] = 3000
+                    # data['goto_page'] = True
+                    # data['message'] = u'修改密码成功，请牢记新密码'
+                    # return render_to_response('message.html', data)
+
+    return render(request, 'set.html', locals())
+
+
+def clean_pwd_2(self):
+    pwd_1 = self.cleaned_data.get('pwd_1')
+    pwd_2 = self.cleaned_data.get('pwd_2')
+
+
+
+
+# 验证旧密码是否正确
+def clean_pwd_old(self):
+    username = self.cleaned_data.get('username')
+    pwd_old = self.cleaned_data.get('pwd_old')

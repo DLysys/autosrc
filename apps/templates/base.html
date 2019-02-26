@@ -85,7 +85,7 @@
 <div class="fly-panel fly-column">
   <div class="layui-container">
     <ul class="layui-clear">
-      <li class="layui-hide-xs layui-this"><a href="/">首页</a></li>
+{#      <li class="layui-hide-xs layui-this"><a href="/">首页</a></li>#}
         {% for t in types %}
             <li><a href="{% url 'books:book_type' t.0 %}">{{ t.1 }}</a></li>
         {% endfor %}
