@@ -17,14 +17,14 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
-    'apps.books.apps.SuitConfig',
+    'apps.articles.apps.SuitConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.books',
+    'apps.articles',
     'apps.users',
     # 'spider_book',
     'django.contrib.sitemaps',
@@ -55,7 +55,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'apps.books.context_processors.add_variable_to_context',
+                'apps.articles.context_processors.add_variable_to_context',
             ],
         },
     },

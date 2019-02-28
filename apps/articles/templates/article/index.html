@@ -6,35 +6,35 @@
     <div class="layui-col-md8">
         <div class="fly-panel" style="margin-bottom: 0;">
             <ul class="fly-list">
-            {% for b in pbooks %}
+            {% for article in articles %}
                 <li>
-                    <a href="{% url 'users:user_home' b.author.id %}" class="fly-avatar">
-                        {% if b.author.profile.avatar %}
-                            <img src="/media/{{ b.author.profile.avatar }}" alt="">
+                    <a href="{% url 'users:user_home' article.author.id %}" class="fly-avatar">
+                        {% if article.author.profile.avatar %}
+                            <img src="/media/{{ article.author.profile.avatar }}" alt="">
                         {% else %}
                             <img src="/media/avatar/default.png">
                         {% endif %}
                     </a>
                     <h2>
-                        <a href="{% url 'books:book_detail' b.id %}">{{ b.title }}</a>
+                        <a href="{% url 'articles:article_detail' article.id %}">{{ article.title }}</a>
                     </h2>
                     <div class="fly-list-info">
-                        <cite>{{ b.category }}</cite>
+                        <cite>{{ article.category }}</cite>
 
 {#                      <a href="{% url 'users:user_home' b.author_id %}" link>#}
-                        <cite>{{ b.author }}</cite>
+                        <cite>{{ article.author }}</cite>
 
                         <!--
                         <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
                         <i class="layui-badge fly-badge-vip">VIP3</i>
                         -->
 {#                      </a>#}
-                      <span>{{ b.c_time|date:"Y-m-j G:i" }}</span>
+                      <span>{{ article.c_time|date:"Y-m-j G:i" }}</span>
 
 {#                      <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>#}
                       <!--<span class="layui-badge fly-badge-accept layui-hide-xs">已结</span>-->
                       <span class="fly-list-nums">
-                        <i class="iconfont icon-pinglun1" title="评论"></i>{{ b.bookuser_set.all|length }}
+                        <i class="iconfont icon-pinglun1" title="评论"></i>{{ article.bookuser_set.all|length }}
                       </span>
                     </div>
                     <div class="fly-list-badge">

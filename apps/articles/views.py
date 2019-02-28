@@ -13,59 +13,59 @@ from apps.users.models import Profile
 def index(request):
     change_info(request)  # 更新访问数
 
-    books = models.Book.objects.order_by('-id')
-    types = models.Book.type_choice
-    paginator = Paginator(books, 15)
+    articles_all = models.Article.objects.order_by('-id')
+    types = models.Article.type_choice
+    paginator = Paginator(articles_all, 15)
     page = request.GET.get('page')
-    pbooks = paginator.get_page(page)
+    articles = paginator.get_page(page)
 
-    return render(request, 'book/index.html', locals())
+    return render(request, 'article/index.html', locals())
 
 
 @csrf_exempt
-def book_detail(request, book_id):
+def article_detail(request, article_id):
     try:
-        book = models.Book.objects.get(id=book_id)
-        res = models.BookUser.objects.get(book_id=book_id, user_id=request.user)
-        comments = models.BookUser.objects.filter(book_id=book_id).exclude(comment=None)
+        article = models.Article.objects.get(id=article_id)
+        res = models.ArticleUser.objects.get(article_id=article_id, user_id=request.user)
+        comments = models.ArticleUser.objects.filter(article_id=article_id).exclude(comment=None)
     except Exception as e:
         print(e)
-    return render(request, 'book/book_detail.html', locals())
+    return render(request, 'article/article_detail.html', locals())
 
 
 @csrf_exempt
 def author_detail(request, author_id):
     try:
         author = models.Author.objects.get(id=author_id)
-        # res = models.BookUser.objects.get(book_id=author_id, user_id=request.user)
+        # res = models.articleUser.objects.get(article_id=author_id, user_id=request.user)
     except Exception as e:
         print(e)
-    return render(request, 'book/author_detail.html', locals())
+    return render(request, 'article/author_detail.html', locals())
 
 
 def boob_category(request, category_id):
-    ks = models.Book.objects.filter(b_category_id=category_id)
+    ks = models.article.objects.filter(b_category_id=category_id)
 
-    return render(request, 'book/index.html', locals())
+    return render(request, 'article/index.html', locals())
 
 
-def book_type(request, type):
-    ks = models.Book.objects.filter(type=type)
-    types = models.Book.type_choice
+def article_type(request, type):
+    ks = models.Article.objects.filter(type=type)
+    types = models.Article.type_choice
     paginator = Paginator(ks, 15)
     page = request.GET.get('page')
     pks = paginator.get_page(page)
 
-    return render(request, 'book/index.html', locals())
+    return render(request, 'article/index.html', locals())
 
 
 @csrf_exempt
-def book_comment(request):
+def article_comment(request):
     if request.method == 'POST':
         content = request.POST.get('content')
-        book_id = request.POST.get('book_id')
+        article_id = request.POST.get('article_id')
         # try:
-        #     book = models.Book.objects.get(id=book_id)
+        #     article = models.article.objects.get(id=article_id)
         #     if k.author == request.user:
         #         return HttpResponse('{"status":"error"}', content_type='application/json')
         #     else:
@@ -77,7 +77,7 @@ def book_comment(request):
         except Exception as e:
             print(e)
         try:
-            models.BookUser.objects.update_or_create(book_id=book_id, user=request.user, defaults={'comment': content})
+            models.articleUser.objects.update_or_create(article_id=article_id, user=request.user, defaults={'comment': content})
             user_profile.point = int(user_profile.point) + 1
             user_profile.save()
             return HttpResponse('{"status":"success"}', content_type='application/json')
@@ -87,8 +87,8 @@ def book_comment(request):
 
 @csrf_exempt
 @login_required
-def book_add(request):
-    types = models.Book.type_choice
+def article_add(request):
+    types = models.article.type_choice
     try:
         user_profile = Profile.objects.get(user=request.user)
     except Exception as e:
@@ -100,7 +100,7 @@ def book_add(request):
         type = request.POST.get('type')
 
         try:
-            models.Book.objects.create(title=title, content=content, author_id=request.user.id,
+            models.article.objects.create(title=title, content=content, author_id=request.user.id,
                                         b_category_id=category, type=type)
             user_profile.point = int(user_profile.point) + 5
             user_profile.save()
@@ -109,37 +109,37 @@ def book_add(request):
             print(e)
             return HttpResponse('{"status":"fail"}', content_type='application/json')
     else:
-        return render(request, 'book/add.html', locals())
+        return render(request, 'article/add.html', locals())
 
 
 @csrf_exempt
 @login_required
-def book_support(request):
+def article_support(request):
     if request.method == 'POST':
-        book_id = request.POST.get('book_id')
+        article_id = request.POST.get('article_id')
         action = request.POST.get('action')
         try:
-            book = models.Book.objects.get(id=book_id)
-            author_id = book.author_id
+            article = models.article.objects.get(id=article_id)
+            author_id = article.author_id
         except Exception as e:
             print(e)
-            book = None
+            article = None
             author_id = None
         if request.user.id != author_id:
             if action == 'support':
                 try:
-                    book.support = int(book.support) + 1
-                    book.save()
-                    models.BookUser.objects.update_or_create(book_id=book_id, user_id=request.user.id, defaults={'support': 1})
+                    article.support = int(article.support) + 1
+                    article.save()
+                    models.articleUser.objects.update_or_create(article_id=article_id, user_id=request.user.id, defaults={'support': 1})
                     return HttpResponse('{"status":"success"}', content_type='application/json')
                 except Exception as e:
                     print(e)
                     return HttpResponse('{"status":"fail"}', content_type='application/json')
             else:
                 try:
-                    book.support = int(book.support) - 1
-                    book.save()
-                    models.BookUser.objects.update_or_create(book_id=book_id, user_id=request.user.id, defaults={'support': 0})
+                    article.support = int(article.support) - 1
+                    article.save()
+                    models.articleUser.objects.update_or_create(article_id=article_id, user_id=request.user.id, defaults={'support': 0})
                     return HttpResponse('{"status":"success"}', content_type='application/json')
                 except Exception as e:
                     print(e)
@@ -147,44 +147,44 @@ def book_support(request):
         else:
             return HttpResponse('{"status":"error"}', content_type='application/json')
     else:
-        return render(request, 'book/book_detail.html', locals())
+        return render(request, 'article/article_detail.html', locals())
 
 
 @csrf_exempt
 @login_required
-def book_collect(request):
-    # types = models.Book.type_choice
+def article_collect(request):
+    # types = models.article.type_choice
     try:
         user_profile = Profile.objects.get(user=request.user)
     except Exception as e:
         print(e)
     if request.method == 'POST':
-        book_id = request.POST.get('book_id')
+        article_id = request.POST.get('article_id')
         action = request.POST.get('action')
         if action == 'collect':
             try:
-                models.BookUser.objects.update_or_create(book_id=book_id, user_id=request.user.id, defaults={'collect': True})
+                models.articleUser.objects.update_or_create(article_id=article_id, user_id=request.user.id, defaults={'collect': True})
                 return HttpResponse('{"status":"success"}', content_type='application/json')
             except Exception as e:
                 print(e)
                 return HttpResponse('{"status":"fail"}', content_type='application/json')
         else:
             try:
-                models.BookUser.objects.update_or_create(book_id=book_id, user_id=request.user.id, defaults={'collect': False})
+                models.articleUser.objects.update_or_create(article_id=article_id, user_id=request.user.id, defaults={'collect': False})
                 return HttpResponse('{"status":"success"}', content_type='application/json')
             except Exception as e:
                 print(e)
                 return HttpResponse('{"status":"fail"}', content_type='application/json')
     else:
-        return render(request, 'book/book_detail.html', locals())
+        return render(request, 'article/article_detail.html', locals())
 
 
 @csrf_exempt
 @login_required
-def book_edit(request, book_id):
-    types = models.Book.type_choice
+def article_edit(request, article_id):
+    types = models.article.type_choice
     try:
-        k = models.Book.objects.get(id=book_id)
+        k = models.article.objects.get(id=article_id)
     except Exception as e:
         print(e)
     if request.method == 'POST':
@@ -204,18 +204,18 @@ def book_edit(request, book_id):
             print(e)
             return HttpResponse('{"status":"fail"}', content_type='application/json')
     else:
-        return render(request, 'book/edit.html', locals())
+        return render(request, 'article/edit.html', locals())
 
 
 @csrf_exempt
-def book_search(request):
+def article_search(request):
     q = request.GET.get('q')
-    ks = models.Book.objects.filter(title__icontains=q)
-    paginator = Paginator(ks, 15)
+    articles = models.article.objects.filter(title__icontains=q)
+    paginator = Paginator(articles, 15)
     page = request.GET.get('page')
     pks = paginator.get_page(page)
 
-    return render(request, 'book/index.html', locals())
+    return render(request, 'article/index.html', locals())
 
 
 def category(request, pk):
@@ -242,17 +242,17 @@ def category(request, pk):
 @csrf_exempt
 def about(request):
 
-    return render(request, 'book/about.html', locals())
+    return render(request, 'article/about.html', locals())
 
 
 @csrf_exempt
 def google_search(request):
 
-    return render(request, 'book/google7c5c39bd4748d567.html', locals())
+    return render(request, 'article/google7c5c39bd4748d567.html', locals())
 
 
 @csrf_exempt
 def baidu_search(request):
 
-    return render(request, 'book/baidu_verify_Z85YzIi6cp.html', locals())
+    return render(request, 'article/baidu_verify_Z85YzIi6cp.html', locals())
 

@@ -1,5 +1,5 @@
 from scrapy_djangoitem import DjangoItem
-from apps.books.models import Book
+from apps.articles.models import Book
 
 
 class CrawlendItem(DjangoItem):

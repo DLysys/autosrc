@@ -7,16 +7,16 @@ from django.conf import settings
 from django.views.static import serve
 from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps import GenericSitemap
-from apps.books.models import Book
+from apps.articles.models import Book
 
 
 sitemaps = {
-    'books': GenericSitemap({'queryset': Book.objects.all(), 'char_field': 'title'}, priority=0.6),
+    'articles': GenericSitemap({'queryset': Book.objects.all(), 'char_field': 'title'}, priority=0.6),
 }
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^', include('apps.books.urls', namespace='books')),
+    url(r'^', include('apps.articles.urls', namespace='articles')),
     url(r'^user/', include('apps.users.urls', namespace='users')),
     url(r'^captcha', include('captcha.urls')),
 

@@ -27,7 +27,7 @@
 {#        <a href="../../../static/fly-3.0/html/case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>#}
       </li>
       <li class="layui-nav-item">
-        <a href="{% url 'books:about' %}" target="_blank"><i class="iconfont icon-chengshi"></i>关于我</a>
+        <a href="{% url 'articles:about' %}" target="_blank"><i class="iconfont icon-chengshi"></i>关于我</a>
       </li>
     </ul>
     
@@ -87,18 +87,18 @@
     <ul class="layui-clear">
 {#      <li class="layui-hide-xs layui-this"><a href="/">首页</a></li>#}
         {% for t in types %}
-            <li><a href="{% url 'books:book_type' t.0 %}">{{ t.1 }}</a></li>
+            <li><a href="{% url 'articles:article_type' t.0 %}">{{ t.1 }}</a></li>
         {% endfor %}
       <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
       
       <!-- 用户登入后显示 -->
 {#      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/user/center">我发布的窍门</a></li>#}
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="">我的收藏</a></li>
+{#      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="">我的收藏</a></li>#}
     </ul> 
     
     <div class="fly-column-right layui-hide-xs"> 
       <span class="fly-search" id="book-search"><i class="layui-icon"></i></span>
-      <a href="{% url 'books:book_add' %}" class="layui-btn">发帖</a>
+      <a href="{% url 'articles:article_add' %}" class="layui-btn">发帖</a>
     </div>
   </div>
 </div>
@@ -129,7 +129,7 @@
                 , shadeClose: true
                 , maxWidth: 10000
                 , skin: 'fly-layer-search'
-                , content: ['<form action="{% url 'books:book_search' %}">'
+                , content: ['<form action="{% url 'articles:article_search' %}">'
                     , '<input autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">'
                     , '</form>'].join('')
                 , success: function (layero) {

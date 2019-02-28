@@ -1,5 +1,5 @@
 {% extends 'super.html' %}
-{% load book_tag %}
+{% load article_tag %}
 {% block title %}作者简介{% endblock %}
 
 {% block content %}
@@ -8,7 +8,7 @@
         <h1>{{ author.name }}</h1>
         <div class="fly-detail-info">
           <!-- <span class="layui-badge">审核中</span> -->
-{#          <span class="layui-badge layui-bg-green fly-detail-column">{{ book.category }}</span>#}
+{#          <span class="layui-badge layui-bg-green fly-detail-column">{{ article.category }}</span>#}
           
 {#          <span class="layui-badge" style="background-color: #999;">未结</span>#}
 {#          <!-- <span class="layui-badge" style="background-color: #5FB878;">已结</span> -->#}
@@ -31,7 +31,7 @@
           </span>
         </div>
         <div class="detail-about">
-{#          <a class="fly-avatar" href="{% url 'users:user_home' book.author.id %}">#}
+{#          <a class="fly-avatar" href="{% url 'users:user_home' article.author.id %}">#}
             {% if book.author.profile.avatar %}
                 <img src="/media/{{ book.author.profile.avatar }}" alt="">
             {% else %}
@@ -143,7 +143,7 @@
         
         <div class="layui-form layui-form-pane">
             {% if request.user.is_authenticated %}
-{#              <form action="{% url 'books:book_detail' book_id %}" method="post">#}
+{#              <form action="{% url 'articles:book_detail' book_id %}" method="post">#}
                 <form class="layui-form">
                     <div class="layui-form-item layui-form-text">
                       <a name="comment"></a>

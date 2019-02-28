@@ -1,4 +1,4 @@
-from apps.books.models import VisitNumber, UserIp, DayNumber
+from apps.articles.models import VisitNumber, UserIp, DayNumber
 from django.utils import timezone
 
 

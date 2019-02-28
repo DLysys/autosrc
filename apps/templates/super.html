@@ -30,28 +30,28 @@
             <ul class="fly-panel-main fly-list-static">
                 {% for cate in cates %}
                   <li>
-                    <a href="{% url 'books:boob_category' cate.id %}">{{ cate.name }}</a>
+                    <a href="{% url 'articles:article_category' cate.id %}">{{ cate.name }}</a>
                   </li>
                 {% endfor %}
             </ul>
           </div>
         <dl class="fly-panel fly-list-one">
             <dt class="fly-panel-title">最热书籍</dt>
-            {% for hk in hot_books %}
-                <dd>
-                  <a href="{% url 'books:book_detail' hk.book_id %}">{{ hk.title }}</a>
-                  <span><i class="iconfont icon-pinglun1"></i>{{ hk.num_books }}</span>
-                </dd>
-            {% endfor %}
+{#            {% for hk in hot_books %}#}
+{#                <dd>#}
+{#                  <a href="{% url 'books:book_detail' hk.book_id %}">{{ hk.title }}</a>#}
+{#                  <span><i class="iconfont icon-pinglun1"></i>{{ hk.num_books }}</span>#}
+{#                </dd>#}
+{#            {% endfor %}#}
         </dl>
         <dl class="fly-panel fly-list-one">
             <dt class="fly-panel-title">热议</dt>
-            {% for hk in hot_books %}
-                <dd>
-                  <a href="{% url 'books:book_detail' hk.book_id %}">{{ hk.title }}</a>
-                  <span><i class="iconfont icon-pinglun1"></i>{{ hk.num_books }}</span>
-                </dd>
-            {% endfor %}
+{#            {% for hk in hot_books %}#}
+{#                <dd>#}
+{#                  <a href="{% url 'books:book_detail' hk.book_id %}">{{ hk.title }}</a>#}
+{#                  <span><i class="iconfont icon-pinglun1"></i>{{ hk.num_books }}</span>#}
+{#                </dd>#}
+{#            {% endfor %}#}
         </dl>
         <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
             <h3 class="fly-panel-title">积分排行</h3>

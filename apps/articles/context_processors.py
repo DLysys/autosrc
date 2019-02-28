@@ -1,4 +1,4 @@
-from .models import VisitNumber, Category, BookUser, Book
+from .models import VisitNumber, Category, ArticleUser, Book, Article
 from apps.users.models import User, Profile
 from django.db.models import Count
 
@@ -6,16 +6,16 @@ from django.db.models import Count
 def add_variable_to_context(request):
     vm = VisitNumber.objects.first()
     cates = Category.objects.all()
-    types = Book.type_choice
+    types = Article.type_choice
 
-    hot_books = BookUser.objects.values('book_id').annotate(num_books=Count('book_id')).order_by('-num_books')[:5]
+    hot_books = ArticleUser.objects.values('book_id').annotate(num_books=Count('book_id')).order_by('-num_books')[:5]
     for hk in hot_books:
         try:
             hk['title'] = Book.objects.get(id=hk['book_id']).title
         except Exception as e:
             print(e)
 
-    zan_books = BookUser.objects.values('book_id').annotate(num_books=Count('book_id')).order_by('-num_books')[:5]
+    zan_books = ArticleUser.objects.values('book_id').annotate(num_books=Count('book_id')).order_by('-num_books')[:5]
     for hk in hot_books:
         try:
             hk['title'] = Book.objects.get(id=hk['book_id']).title

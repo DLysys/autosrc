@@ -4,18 +4,40 @@ from django.utils import timezone
 from django.urls import reverse
 
 
+class Article(models.Model):
+    """
+    主题
+    """
+    type_choice = (
+        ('book', '书籍'),
+        ('help', '求助'),
+        ('advice', '建议'),
+        ('notice', '公告'),
+    )
+
+    title = models.CharField(max_length=100, default='', verbose_name="主题名称")
+    desc = models.CharField(max_length=255, default='', verbose_name="简介")
+    c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    author = models.ForeignKey('Author', null=True, blank=True, verbose_name='作者', on_delete=models.CASCADE, related_name='article_author')
+    support = models.IntegerField(default=0, verbose_name='点赞数')
+    content = models.TextField(verbose_name='内容', default='')
+    type = models.CharField(choices=type_choice, max_length=20, default='', verbose_name="类型")
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('articles:article_type', kwargs={'article_id': self.id})
+
+    class Meta:
+        verbose_name = '主题'
+        verbose_name_plural = "主题"
+
+
 class Book(models.Model):
     """
     书籍
     """
-    type_choice = (
-        ('share', '书籍'),
-        ('help', '求助'),
-        ('advice', '建议'),
-        ('notice', '公告'),
-
-    )
-
     title = models.CharField(max_length=100, default='', verbose_name="书籍名称")
     desc = models.CharField(max_length=255, default='', verbose_name="简介")
     category = models.ForeignKey('Category', null=True, blank=True, verbose_name='分类', on_delete=models.CASCADE, related_name='b_category')
@@ -23,15 +45,8 @@ class Book(models.Model):
     author = models.ForeignKey('Author', null=True, blank=True, verbose_name='作者', on_delete=models.CASCADE, related_name='book_author')
     support = models.IntegerField(default=0, verbose_name='点赞数')
 
-    # content = models.TextField(verbose_name='内容', default='')
-    type = models.CharField(choices=type_choice, max_length=20, default='', verbose_name="类型")
-    # url = models.CharField(verbose_name='采集URL', max_length=200, default='')
-
     def __str__(self):
         return self.title
-
-    def get_absolute_url(self):
-        return reverse('books:book_detail', kwargs={'book_id': self.id})
 
     class Meta:
         verbose_name = '书籍'
@@ -95,7 +110,7 @@ class Author(models.Model):
         verbose_name_plural = "作者"
 
 
-class BookUser(models.Model):
+class ArticleUser(models.Model):
     """ 窍门和用户的关系表 """
 
     support_choice = (
@@ -113,8 +128,8 @@ class BookUser(models.Model):
     class Meta:
         verbose_name = '支持对应用户的中间表'
         verbose_name_plural = "评价对应用户的中间表"
-        db_table = "book_user_relationship"
-        # unique_together = (("book", "user"),)  # 设置联合主键
+        db_table = "article_user_relationship"
+        # unique_together = (("article", "user"),)  # 设置联合主键
         # permissions = (
         #     ('port_vuls_list', u'资产对应漏洞信息中间表'),
         # )

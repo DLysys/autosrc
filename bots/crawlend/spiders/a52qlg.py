@@ -1,6 +1,6 @@
 import scrapy
 from bs4 import BeautifulSoup
-from apps.books.models import Book
+from apps.articles.models import Book
 import requests
 
 

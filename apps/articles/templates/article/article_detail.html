@@ -1,14 +1,14 @@
 {% extends 'super.html' %}
-{% load book_tag %}
+{% load article_tag %}
 {% block title %}详细{% endblock %}
 
 {% block content %}
     <div class="layui-col-md8 content detail">
       <div class="fly-panel detail-box">
-        <h1>{{ book.title }}</h1>
+        <h1>{{ article.title }}</h1>
         <div class="fly-detail-info">
           <!-- <span class="layui-badge">审核中</span> -->
-          <span class="layui-badge layui-bg-green fly-detail-column">{{ book.category }}</span>
+          <span class="layui-badge layui-bg-green fly-detail-column">{{ article.category }}</span>
           
 {#          <span class="layui-badge" style="background-color: #999;">未结</span>#}
 {#          <!-- <span class="layui-badge" style="background-color: #5FB878;">已结</span> -->#}
@@ -31,20 +31,20 @@
           </span>
         </div>
         <div class="detail-about">
-          <a class="fly-avatar" href="{% url 'books:author_detail' book.author.id %}">
-            {% if book.author.profile.avatar %}
-                <img src="/media/{{ book.author.profile.avatar }}" alt="">
+          <a class="fly-avatar" href="{% url 'articles:author_detail' article.author.id %}">
+            {% if article.author.profile.avatar %}
+                <img src="/media/{{ article.author.profile.avatar }}" alt="">
             {% else %}
                 <img src="/media/avatar/default.png">
             {% endif %}
           </a>
           <div class="fly-detail-user">
 {#            <a href="{% url 'users:user_home' k.author_id %}" class="fly-link">#}
-              <cite>{{ book.author }}</cite>
+              <cite>{{ article.author }}</cite>
 {#              <i class="iconfont icon-renzheng" title="认证信息：{{ rows.user.approve }}"></i>#}
 {#              <i class="layui-badge fly-badge-vip">VIP3</i>#}
             </a>
-            <span>{{ book.c_time|date:"Y-m-j G:i" }}</span>
+            <span>{{ article.c_time|date:"Y-m-j G:i" }}</span>
           </div>
           <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
 {#            <span style="padding-right: 10px; color: #FF7200"></span>#}
@@ -58,7 +58,7 @@
         </div>
         <div class="detail-body photos">
             <div class="layui-collapse">
-                {% for chapter in book.chapter_set.all %}
+                {% for chapter in article.chapter_set.all %}
                     <div class="layui-colla-item">
                       <h2 class="layui-colla-title">{{ chapter.title }}<i class="layui-icon layui-colla-icon"></i></h2>
                       <div class="layui-colla-content layui-show">
@@ -71,12 +71,12 @@
       <br>
         <div class="jieda-reply">
           {% if res.support %}
-              <span class="jieda-zan zanok" type="zan" id="unzan-book">
+              <span class="jieda-zan zanok" type="zan" id="unzan-article">
           {% else %}
-              <span class="jieda-zan" type="zan" id="zan-book">
+              <span class="jieda-zan" type="zan" id="zan-article">
           {% endif %}
             <i class="iconfont icon-zan"></i>
-            <em>{{ book.support }}</em>
+            <em>{{ article.support }}</em>
           </span>
 
             <span class="jieda-zan" type="zan">
@@ -98,7 +98,7 @@
           <legend>回帖</legend>
         </fieldset>
         <ul class="jieda" id="jieda">
-            {% for c in book.bookuser_set.all %}
+            {% for c in article.articleuser_set.all %}
                 <li data-id="111">
             <a name="item-1111111111"></a>
             <div class="detail-about detail-about-reply">
@@ -143,7 +143,7 @@
         
         <div class="layui-form layui-form-pane">
             {% if request.user.is_authenticated %}
-{#              <form action="{% url 'books:book_detail' book_id %}" method="post">#}
+{#              <form action="{% url 'articles:article_detail' article_id %}" method="post">#}
                 <form class="layui-form">
                     <div class="layui-form-item layui-form-text">
                       <a name="comment"></a>
@@ -152,12 +152,12 @@
                       </div>
                     </div>
                     <div class="layui-form-item">
-                      <input type="hidden" id="book_id" value="{{ book_id }}">
+                      <input type="hidden" id="article_id" value="{{ article_id }}">
                       <button class="layui-btn" lay-submit lay-filter="add-comment">提交回复</button>
                     </div>
               </form>
             {% else %}
-                <p>请<a href="{% url 'users:login' %}?next={% url 'books:book_detail' book_id %}">登录</a>后再添加评论。</p>
+                <p>请<a href="{% url 'users:login' %}?next={% url 'articles:article_detail' article_id %}">登录</a>后再添加评论。</p>
             {% endif %}
         </div>
       </div>
@@ -175,8 +175,8 @@
               var content = $("#L_content").val();
           $.ajax({
               type: "post",
-              url:"{% url 'books:book_comment' %}",
-              data:{'book_id': {{ book_id }}, 'content': content},
+              url:"{% url 'articles:article_comment' %}",
+              data:{'article_id': {{ article_id }}, 'content': content},
               dateType:"json",
               async: false,
               {#beforeSend:function(xhr, settings){#}
@@ -203,10 +203,10 @@
 
 {#    点赞#}
     <script>
-        $('#zan-book').click(function(){
+        $('#zan-article').click(function(){
         $.ajax({
-            url: '{% url 'books:book_support' %}',
-            data: {'book_id': {{ book_id }}, 'action': 'support'},
+            url: '{% url 'articles:article_support' %}',
+            data: {'article_id': {{ article_id }}, 'action': 'support'},
             type: 'post',
             dataType: 'json',
             {#contentType: 'application/json; charset=utf-8',#}
@@ -228,10 +228,10 @@
 
 {#    踩#}
     <script>
-        $('#unzan-book').click(function(){
+        $('#unzan-article').click(function(){
         $.ajax({
-            url: '{% url 'books:book_support' %}',
-            data: {'book_id': {{ book_id }}, 'action': 'unsupport'},
+            url: '{% url 'articles:article_support' %}',
+            data: {'article_id': {{ article_id }}, 'action': 'unsupport'},
             type: 'post',
             dataType: 'json',
             {#contentType: 'application/json; charset=utf-8',#}
@@ -255,8 +255,8 @@
     <script>
         $('#collect').click(function(){
         $.ajax({
-            url: '{% url 'books:book_collect' %}',
-            data: {'book_id': {{ book_id }}, 'action': 'collect'},
+            url: '{% url 'articles:article_collect' %}',
+            data: {'article_id': {{ article_id }}, 'action': 'collect'},
             type: 'post',
             dataType: 'json',
             {#contentType: 'application/json; charset=utf-8',#}
@@ -280,8 +280,8 @@
     <script>
         $('#uncollect').click(function(){
         $.ajax({
-            url: '{% url 'books:book_collect' %}',
-            data: {'book_id': {{ book_id }}, 'action': 'uncollect'},
+            url: '{% url 'articles:article_collect' %}',
+            data: {'article_id': {{ article_id }}, 'action': 'uncollect'},
             type: 'post',
             dataType: 'json',
             {#contentType: 'application/json; charset=utf-8',#}
