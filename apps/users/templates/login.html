@@ -13,9 +13,9 @@
       <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
         <div class="layui-tab-item layui-show">
           <div class="layui-form layui-form-pane">
-            <form method="post">
+            <form class="layui-form">
               <div class="layui-form-item">
-                <label for="L_email" class="layui-form-label">邮箱</label>
+                <label for="text" class="layui-form-label">用户名</label>
                 <div class="layui-input-inline">
                   {{ form.username }}
                 </div>
@@ -42,7 +42,7 @@
 {#                </div>#}
               </div>
               <div class="layui-form-item">
-                <button class="layui-btn" lay-filter="*" lay-submit>立即登录</button>
+                <button class="layui-btn" lay-filter="L_login" lay-submit>立即登录</button>
                 <span style="padding-left:20px;">
                   <a href="{% url 'users:find_pass' %}">忘记密码？</a>
                 </span>
@@ -63,6 +63,50 @@
 {% endblock %}
 
 {% block js %}
+     <script>
+        layui.use(['layer','form'], function(){
+        var layer = layui.layer
+           ,form = layui.form;
+          form.on('submit(L_login)', function(data){
+              var username = $("#L_username").val();
+              var password = $("#L_pass").val();
+              var vercode = $("#id_captcha_1").val();
+              var haskey = $("#id_captcha_0").val();
+
+          $.ajax({
+              type: "post",
+              url: "{% url 'users:login' %}",
+              data: {'username': username, 'password': password, 'vercode': vercode, 'haskey': haskey},
+              dateType: "json",
+              async: false,
+              {#beforeSend:function(xhr, settings){#}
+              {#    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");#}
+              {#  },#}
+              success: function(data) {
+                  if(data.status == 'success'){
+                      alert("登录成功！");
+                      window.location.reload();//刷新当前页面.
+                  }else if(data.status == 'vercode error'){
+                      $('#jsCompanyTips').html(data.msg)
+                      alert("验证码错误！");
+                      location.reload();
+                  }
+                  else if(data.status == 'error'){
+                      $('#jsCompanyTips').html(data.msg)
+                      alert("用户名或密码错误！");
+                      location.reload();
+                  }
+                  else if(data.status == 'user error'){
+                      $('#jsCompanyTips').html(data.msg)
+                      alert("用户名不存在！");
+                      location.reload();
+                  }
+              },
+          });
+          return false;
+            });
+          });
+    </script>
     <script>
         $("img.captcha").click(function(){
             $.ajax({

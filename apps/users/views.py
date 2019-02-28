@@ -77,33 +77,35 @@ def login_site(request):
         next = request.GET.get('next', None)
         return next and next or reverse(_url)
 
-    if request.method == "POST":
-        form = forms.SigninForm(request.POST)
-        if form.is_valid():
-            human = True
-            email = form.cleaned_data['username']
-            passwd = form.cleaned_data['password']
+    if request.method == 'POST':
+        cs = CaptchaStore.objects.filter(response=request.POST.get('vercode'), hashkey=request.POST.get('haskey'))
+        if cs:
+            username = request.POST.get('username')
+            passwd = request.POST.get('password')
             try:
-                username = User.objects.get(email=email)
+                username = User.objects.get(username=username)
             except Exception as e:
                 print(e)
                 username = ''
-                errors = '用户不存在！'
+                return HttpResponse('{"status":"user error"}', content_type='application/json')
             user = authenticate(username=username, password=passwd)
             if user:
                 auth.login(request, user)
-                return HttpResponseRedirect(current_user_url(user))
+                return HttpResponse('{"status":"success"}', content_type='application/json')
+
+                # return HttpResponseRedirect(current_user_url(user))
             else:
-                errors = u'登陆失败，邮箱或密码错误！'
+                return HttpResponse('{"status":"error"}', content_type='application/json')
+                # return HttpResponseRedirect(reverse("users:login"), locals())
         else:
-            return HttpResponseRedirect(reverse("users:login"))
+            return HttpResponse('{"status":"vercode error"}', content_type='application/json')
+
+            # return HttpResponseRedirect(reverse("users:login"))
     else:
         if request.user.is_authenticated:
             url = current_user_url(request.user)
             return HttpResponseRedirect(url)
         else:
-            from captcha.models import CaptchaStore
-            from captcha.helpers import captcha_image_url
             hashkey = CaptchaStore.generate_key()
             image_url = captcha_image_url(hashkey)
 
@@ -307,23 +309,17 @@ def upload_image(request):
 @csrf_exempt
 @login_required
 def change_password(request):
-    data = {}
-    data['form_title'] = u'修改密码'
-    data['submit_name'] = u'　确定　'
-
     if request.method == 'POST':
-        email = request.POST.get('email')
         nowpass = request.POST.get('nowpass')
         newpass = request.POST.get('newpass')
         repass = request.POST.get('repass')
-
-        user = authenticate(email=email, password=nowpass)
+        user = authenticate(username=request.user, password=nowpass)
 
         if user is None:
             return HttpResponse('{"status":"password wrong"}', content_type='application/json')
         else:
             if newpass != repass:
-                raise ValidationError(u'两次输入的密码不一致，再输入一次吧')
+                return HttpResponse('{"status":"not match"}', content_type='application/json')
             else:
                 if len(newpass) < 8 or len(newpass) > 36:
                     return HttpResponse('{"status":"password length error"}', content_type='application/json')

@@ -6,8 +6,8 @@ from captcha.fields import CaptchaField
 
 
 class SigninForm(forms.Form):
-    username = forms.CharField(label='邮箱', max_length=75, widget=forms.TextInput(attrs={'class': 'layui-input', 'placeholder': ''}))
-    password = forms.CharField(label='密码', max_length=25, widget=forms.PasswordInput(attrs={'class': 'layui-input', 'placeholder': ''}))
+    username = forms.CharField(label='用户名', max_length=75, widget=forms.TextInput(attrs={'class': 'layui-input', 'required': '', 'id': 'L_username'}))
+    password = forms.CharField(label='密码', max_length=25, widget=forms.PasswordInput(attrs={'class': 'layui-input', 'required': '', 'id': 'L_pass'}))
     captcha = CaptchaField(error_messages={"invalid": u"验证码错误", "required": u"请输入验证码"})
 
 
