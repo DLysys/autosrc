@@ -119,7 +119,7 @@ class ArticleUser(models.Model):
         (0, '踩'),
     )
 
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, default=None)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     support = models.IntegerField(choices=support_choice, default=None, blank=True, null=True)
     comment = models.TextField(verbose_name='评论', default=None, null=True)

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from . import models
+from .models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -13,8 +13,8 @@ from apps.users.models import Profile
 def index(request):
     change_info(request)  # 更新访问数
 
-    articles_all = models.Article.objects.order_by('-id')
-    types = models.Article.type_choice
+    articles_all = Article.objects.order_by('-id')
+    types = Article.type_choice
     paginator = Paginator(articles_all, 15)
     page = request.GET.get('page')
     articles = paginator.get_page(page)
@@ -25,9 +25,9 @@ def index(request):
 @csrf_exempt
 def article_detail(request, article_id):
     try:
-        article = models.Article.objects.get(id=article_id)
-        res = models.ArticleUser.objects.get(article_id=article_id, user_id=request.user)
-        comments = models.ArticleUser.objects.filter(article_id=article_id).exclude(comment=None)
+        article = Article.objects.get(id=article_id)
+        res = ArticleUser.objects.get(article_id=article_id, user_id=request.user)
+        comments = ArticleUser.objects.filter(article_id=article_id).exclude(comment=None)
     except Exception as e:
         print(e)
     return render(request, 'article/article_detail.html', locals())
@@ -36,22 +36,22 @@ def article_detail(request, article_id):
 @csrf_exempt
 def author_detail(request, author_id):
     try:
-        author = models.Author.objects.get(id=author_id)
+        author = Author.objects.get(id=author_id)
         # res = models.articleUser.objects.get(article_id=author_id, user_id=request.user)
     except Exception as e:
         print(e)
     return render(request, 'article/author_detail.html', locals())
 
 
-def boob_category(request, category_id):
-    ks = models.article.objects.filter(b_category_id=category_id)
+def article_category(request, category_id):
+    articles = Book.objects.filter(category_id=category_id)
 
     return render(request, 'article/index.html', locals())
 
 
 def article_type(request, type):
-    articles_all = models.Article.objects.filter(type=type)
-    types = models.Article.type_choice
+    articles_all = Article.objects.filter(type=type)
+    types = Article.type_choice
     paginator = Paginator(articles_all, 15)
     page = request.GET.get('page')
     articles = paginator.get_page(page)
@@ -75,20 +75,22 @@ def article_comment(request):
         try:
             user_profile = Profile.objects.get(user=request.user)
         except Exception as e:
+            user_profile = None
             print(e)
         try:
-            models.articleUser.objects.update_or_create(article_id=article_id, user=request.user, defaults={'comment': content})
+            ArticleUser.objects.update_or_create(article_id=article_id, user=request.user, defaults={'comment': content})
             user_profile.point = int(user_profile.point) + 1
             user_profile.save()
             return HttpResponse('{"status":"success"}', content_type='application/json')
         except Exception as e:
+            print(e)
             return HttpResponse('{"status":"fail"}', content_type='application/json')
 
 
 @csrf_exempt
 @login_required
 def article_add(request):
-    types = models.article.type_choice
+    types = Article.type_choice
     try:
         user_profile = Profile.objects.get(user=request.user)
     except Exception as e:
@@ -100,7 +102,7 @@ def article_add(request):
         type = request.POST.get('type')
 
         try:
-            models.article.objects.create(title=title, content=content, author_id=request.user.id,
+            Article.objects.create(title=title, content=content, author_id=request.user.id,
                                         b_category_id=category, type=type)
             user_profile.point = int(user_profile.point) + 5
             user_profile.save()
@@ -119,7 +121,7 @@ def article_support(request):
         article_id = request.POST.get('article_id')
         action = request.POST.get('action')
         try:
-            article = models.article.objects.get(id=article_id)
+            article = Article.objects.get(id=article_id)
             author_id = article.author_id
         except Exception as e:
             print(e)
@@ -130,7 +132,7 @@ def article_support(request):
                 try:
                     article.support = int(article.support) + 1
                     article.save()
-                    models.articleUser.objects.update_or_create(article_id=article_id, user_id=request.user.id, defaults={'support': 1})
+                    ArticleUser.objects.update_or_create(article_id=article_id, user_id=request.user.id, defaults={'support': 1})
                     return HttpResponse('{"status":"success"}', content_type='application/json')
                 except Exception as e:
                     print(e)
@@ -139,7 +141,7 @@ def article_support(request):
                 try:
                     article.support = int(article.support) - 1
                     article.save()
-                    models.articleUser.objects.update_or_create(article_id=article_id, user_id=request.user.id, defaults={'support': 0})
+                    ArticleUser.objects.update_or_create(article_id=article_id, user_id=request.user.id, defaults={'support': 0})
                     return HttpResponse('{"status":"success"}', content_type='application/json')
                 except Exception as e:
                     print(e)
@@ -163,14 +165,14 @@ def article_collect(request):
         action = request.POST.get('action')
         if action == 'collect':
             try:
-                models.articleUser.objects.update_or_create(article_id=article_id, user_id=request.user.id, defaults={'collect': True})
+                ArticleUser.objects.update_or_create(article_id=article_id, user_id=request.user.id, defaults={'collect': True})
                 return HttpResponse('{"status":"success"}', content_type='application/json')
             except Exception as e:
                 print(e)
                 return HttpResponse('{"status":"fail"}', content_type='application/json')
         else:
             try:
-                models.articleUser.objects.update_or_create(article_id=article_id, user_id=request.user.id, defaults={'collect': False})
+                ArticleUser.objects.update_or_create(article_id=article_id, user_id=request.user.id, defaults={'collect': False})
                 return HttpResponse('{"status":"success"}', content_type='application/json')
             except Exception as e:
                 print(e)
@@ -182,9 +184,9 @@ def article_collect(request):
 @csrf_exempt
 @login_required
 def article_edit(request, article_id):
-    types = models.article.type_choice
+    types = Article.type_choice
     try:
-        k = models.article.objects.get(id=article_id)
+        k = Article.objects.get(id=article_id)
     except Exception as e:
         print(e)
     if request.method == 'POST':
@@ -210,33 +212,12 @@ def article_edit(request, article_id):
 @csrf_exempt
 def article_search(request):
     q = request.GET.get('q')
-    articles = models.article.objects.filter(title__icontains=q)
+    articles = Article.objects.filter(title__icontains=q)
     paginator = Paginator(articles, 15)
     page = request.GET.get('page')
     pks = paginator.get_page(page)
 
     return render(request, 'article/index.html', locals())
-
-
-def category(request, pk):
-    """
-    :param request:
-    :param pk:
-    :return:
-    相应分类下的窍门检索
-    """
-    try:
-        cate = models.Category.objects.get(pk=pk)
-    except models.Category.DoesNotExist:  # 读取分类，如果不存在，则引发错误，并404
-        raise Http404
-
-    ks = cate.c.all()  ## 获取分类下的所有文章
-    # return render_to_response('blog/index.html', ## 使用首页的文章列表模版，但加入了的一个`is_category`开关
-    #     {"posts": posts,
-    #     "is_category": True,
-    #     "cate_name": cate.name,
-    #     "categories": Category.objects.all()},
-    # context_instance=RequestContext(request))
 
 
 @csrf_exempt

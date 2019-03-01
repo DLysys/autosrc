@@ -182,7 +182,7 @@ def find_pass(request):
 @login_required
 def logout_site(request):
     logout(request)
-    return HttpResponseRedirect(reverse("books:index"))
+    return HttpResponseRedirect(reverse("articles:index"))
 
 
 def global_settings(request):

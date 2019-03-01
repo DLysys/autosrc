@@ -30,7 +30,7 @@
             <ul class="fly-panel-main fly-list-static">
                 {% for cate in cates %}
                   <li>
-                    <a href="{% url 'articles:article_category' cate.id %}">{{ cate.name }}</a>
+                    <a href="{% url 'articles:article_category' cate.id %}">{{ cate.name }} ({{ cate.books|length }})</a>
                   </li>
                 {% endfor %}
             </ul>

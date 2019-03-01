@@ -6,21 +6,23 @@ from django.db.models import Count
 def add_variable_to_context(request):
     vm = VisitNumber.objects.first()
     cates = Category.objects.all()
+    for cate in cates:
+        cate.books = Book.objects.filter(category=cate)
     types = Article.type_choice
 
-    hot_books = ArticleUser.objects.values('book_id').annotate(num_books=Count('book_id')).order_by('-num_books')[:5]
-    for hk in hot_books:
+    hot_articles = ArticleUser.objects.values('article_id').annotate(num_articles=Count('article_id')).order_by('-num_articles')[:5]
+    for ha in hot_articles:
         try:
-            hk['title'] = Book.objects.get(id=hk['book_id']).title
+            ha['title'] = Article.objects.get(id=ha['article_id']).title
         except Exception as e:
             print(e)
 
-    zan_books = ArticleUser.objects.values('book_id').annotate(num_books=Count('book_id')).order_by('-num_books')[:5]
-    for hk in hot_books:
-        try:
-            hk['title'] = Book.objects.get(id=hk['book_id']).title
-        except Exception as e:
-            print(e)
+    # zan_articles = ArticleUser.objects.values('article_id').annotate(num_articles=Count('article_id')).order_by('-num_articles')[:5]
+    # for hk in hot_books:
+    #     try:
+    #         hk['title'] = Book.objects.get(id=hk['book_id']).title
+    #     except Exception as e:
+    #         print(e)
 
     hot_users = Profile.objects.order_by('-point')[:10]
     for hu in hot_users:
