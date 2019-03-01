@@ -10,7 +10,8 @@
           <!-- <span class="layui-badge">审核中</span> -->
           <span class="layui-badge layui-bg-green fly-detail-column">{{ article.get_type_display }}</span>
           {% if article.type == 'book' %}
-            <span class="layui-badge" style="background-color: #999;">{{ article.book.category }}</span>
+              <span class="layui-badge" style="background-color: #383399;">{{ article.book.author }}</span>
+              <span class="layui-badge" style="background-color: #999561;">{{ article.book.category }}</span>
           {% endif %}
 {#          <span class="layui-badge" style="background-color: #5FB878;">已结</span>#}
 {#          #}
@@ -58,16 +59,20 @@
           </div>
         </div>
         <div class="detail-body photos">
-            <div class="layui-collapse">
-                {% for chapter in article.chapter_set.all %}
-                    <div class="layui-colla-item">
-                      <h2 class="layui-colla-title">{{ chapter.title }}<i class="layui-icon layui-colla-icon"></i></h2>
-                      <div class="layui-colla-content layui-show">
-                          <p>{{ chapter.content|linebreaks }}</p>
-                      </div>
-                    </div>
-                {% endfor %}
-            </div>
+            {% if article.type == 'book' %}
+                <div class="layui-collapse">
+                    {% for chapter in article.book.chapter_set.all %}
+                        <div class="layui-colla-item">
+                          <h2 class="layui-colla-title">{{ chapter.title }}<i class="layui-icon layui-colla-icon"></i></h2>
+                          <div class="layui-colla-content layui-show">
+                              <p>{{ chapter.content|linebreaks }}</p>
+                          </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>{{ article.content|linebreaks }}</p>
+            {% endif %}
         </div>
       <br>
         <div class="jieda-reply">

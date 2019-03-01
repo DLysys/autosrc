@@ -44,6 +44,9 @@ def author_detail(request, author_id):
 
 
 def article_category(request, category_id):
+    """
+    其实是书籍分类，为了兼容HTML模板，返回articles
+    """
     articles = Book.objects.filter(category_id=category_id)
 
     return render(request, 'article/index.html', locals())
