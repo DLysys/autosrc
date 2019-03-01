@@ -18,7 +18,7 @@ class Article(models.Model):
     title = models.CharField(max_length=100, default='', verbose_name="主题名称")
     desc = models.CharField(max_length=255, default='', verbose_name="简介")
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
-    author = models.ForeignKey('Author', null=True, blank=True, verbose_name='作者', on_delete=models.CASCADE, related_name='article_author')
+    author = models.ForeignKey('Author', null=True, blank=True, verbose_name='发布者', on_delete=models.CASCADE, related_name='article_author')
     support = models.IntegerField(default=0, verbose_name='点赞数')
     content = models.TextField(verbose_name='内容', default='')
     type = models.CharField(choices=type_choice, max_length=20, default='', verbose_name="类型")
@@ -38,6 +38,7 @@ class Book(models.Model):
     """
     书籍
     """
+    article = models.OneToOneField('Article', on_delete=models.CASCADE, default=None)  # 非常关键的一对一关联！
     title = models.CharField(max_length=100, default='', verbose_name="书籍名称")
     desc = models.CharField(max_length=255, default='', verbose_name="简介")
     category = models.ForeignKey('Category', null=True, blank=True, verbose_name='分类', on_delete=models.CASCADE, related_name='b_category')

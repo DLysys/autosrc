@@ -50,11 +50,11 @@ def boob_category(request, category_id):
 
 
 def article_type(request, type):
-    ks = models.Article.objects.filter(type=type)
+    articles_all = models.Article.objects.filter(type=type)
     types = models.Article.type_choice
-    paginator = Paginator(ks, 15)
+    paginator = Paginator(articles_all, 15)
     page = request.GET.get('page')
-    pks = paginator.get_page(page)
+    articles = paginator.get_page(page)
 
     return render(request, 'article/index.html', locals())
 

@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^author/(?P<author_id>[0-9]+)/$', views.author_detail, name="author_detail"),
 
     url(r'^comment/$', views.article_comment, name="article_comment"),
-    url(r'^type/(?P<type>.*)/$', views.article_type, name="article_type"),
+    url(r'^type/(?P<type>.*)$', views.article_type, name="article_type"),
     url(r'^category/(?P<category_id>[0-9]+)/$', views.category, name="article_category"),
     url(r'^add/$', views.article_add, name="article_add"),
     url(r'^support/$', views.article_support, name="article_support"),

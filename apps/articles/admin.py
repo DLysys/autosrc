@@ -8,6 +8,12 @@ class ArticleAdmin(admin.ModelAdmin):
     search_fields = ('title', 'author', 'type',)
 
 
+class BookAdmin(admin.ModelAdmin):
+    list_display = ['title', 'author', 'c_time']
+    list_filter = ['title', 'author']
+    search_fields = ('title', 'author')
+
+
 class ChapterAdmin(admin.ModelAdmin):
     list_display = ['title', 'c_time']
     list_filter = ['title', 'c_time']
@@ -27,6 +33,8 @@ class AuthorAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Article, ArticleAdmin)
+admin.site.register(Book, BookAdmin)
+
 admin.site.register(Chapter, ChapterAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Author, AuthorAdmin)
