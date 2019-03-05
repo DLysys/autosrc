@@ -14,8 +14,10 @@ django-haystack==2.8.1
 html5lib==1.0.1
 idna==2.6
 jieba==0.39
+mistune
 pdfrw==0.4
 Pillow==5.1.0
+Pygments
 pyasn1==0.4.2
 pyasn1-modules==0.2.1
 pycparser==2.18

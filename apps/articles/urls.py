@@ -5,7 +5,7 @@ app_name = 'articles'
 
 urlpatterns = [
     url(r'^$', views.index, name="index"),
-    url(r'^article/(?P<article_id>[0-9]+)$', views.article_detail, name="article_detail"),
+    url(r'^article/(?P<article_id>[0-9]+).html$', views.article_detail, name="article_detail"),
     url(r'^author/(?P<author_id>[0-9]+)$', views.author_detail, name="author_detail"),
 
     url(r'^comment$', views.article_comment, name="article_comment"),
