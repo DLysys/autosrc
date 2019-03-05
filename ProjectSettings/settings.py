@@ -26,10 +26,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'apps.articles',
     'apps.users',
     # 'spider_book',
-    'django.contrib.sitemaps',
     'captcha',
     
 ]

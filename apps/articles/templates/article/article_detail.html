@@ -30,7 +30,7 @@
           </div>
           <span class="fly-list-nums"> 
             <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i>{{ comments|length }}</a>
-{#            <i class="iconfont" title="人气">&#xe60b;</i> 99999#}
+            <i class="iconfont" title="人气">&#xe60b;</i> {{ article.viewed|default:0 }}
           </span>
         </div>
         <div class="detail-about">

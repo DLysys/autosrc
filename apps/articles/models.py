@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from ProjectSettings.utils import cache_decorator, cache
 import logging
 
 logger = logging.getLogger(__name__)
@@ -55,6 +56,16 @@ class Article(models.Model):
     def get_admin_url(self):
         info = (self._meta.app_label, self._meta.model_name)
         return reverse('admin:%s_%s_change' % info, args=(self.pk,))
+
+    @cache_decorator(expiration=60 * 100)
+    def next_article(self):
+        # 下一篇
+        return Article.objects.filter(id__gt=self.id, status='p').order_by('id').first()
+
+    @cache_decorator(expiration=60 * 100)
+    def prev_article(self):
+        # 前一篇
+        return Article.objects.filter(id__lt=self.id, status='p').first()
 
 
 class Book(models.Model):
