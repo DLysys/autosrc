@@ -19,7 +19,6 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
-    'apps.articles.apps.SuitConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,7 +49,7 @@ ROOT_URLCONF = 'ProjectSettings.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'apps/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

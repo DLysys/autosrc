@@ -1,15 +1,5 @@
-from __future__ import unicode_literals
-
 from django.apps import AppConfig
 import os
-
-
-from suit.apps import DjangoSuitConfig
-
-
-class SuitConfig(DjangoSuitConfig):
-    # layout = 'horizontal'
-    layout = 'vertical'
 
 
 class BookConfig(AppConfig):

@@ -7,30 +7,61 @@ from django.http import Http404
 from utils.visit_info import change_info
 from django.core.paginator import Paginator
 from apps.users.models import Profile
+from django.views import View
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+from django.conf import settings
+import markdown2
 
 
-@csrf_exempt
-def index(request):
-    change_info(request)  # 更新访问数
+class IndexView(ListView):
+    model = Article
+    template_name = 'articles/index.html'
+    paginate_by = settings.PAGINATE_BY
+    context_object_name = 'articles'
 
-    articles_all = Article.objects.order_by('-id')
-    types = Article.type_choice
-    paginator = Paginator(articles_all, 15)
-    page = request.GET.get('page')
-    articles = paginator.get_page(page)
-
-    return render(request, 'article/index.html', locals())
+    # def get_queryset(self):
+    #     articles = Article.objects.filter(status='p')
+    #     return articles
 
 
-@csrf_exempt
-def article_detail(request, article_id):
-    try:
-        article = Article.objects.get(id=article_id)
-        res = ArticleUser.objects.get(article_id=article_id, user_id=request.user)
-        comments = ArticleUser.objects.filter(article_id=article_id).exclude(comment=None)
-    except Exception as e:
-        print(e)
-    return render(request, 'article/article_detail.html', locals())
+# @csrf_exempt
+# def index(request):
+#     change_info(request)  # 更新访问数
+#
+#     articles_all = Article.objects.order_by('-id')
+#     types = Article.type_choice
+#     paginator = Paginator(articles_all, 15)
+#     page = request.GET.get('page')
+#     articles = paginator.get_page(page)
+#
+#     return render(request, 'articles/index.html', locals())
+
+
+class ArticleDetailView(DetailView):
+    """ 主题详细页 """
+    model = Article
+    template_name = "articles/article_detail.html"
+    context_object_name = "article"
+    pk_url_kwarg = 'article_id'
+
+    def get_object(self, queryset=None):
+        obj = super(ArticleDetailView, self).get_object()
+        obj.viewed()
+        self.object = obj
+        # obj.content = markdown2.markdown(obj.content, extras=['fenced-code-blocks'], )
+        return obj
+
+
+# @csrf_exempt
+# def article_detail(request, article_id):
+#     try:
+#         article = Article.objects.get(id=article_id)
+#         res = ArticleUser.objects.get(article_id=article_id, user_id=request.user)
+#         comments = ArticleUser.objects.filter(article_id=article_id).exclude(comment=None)
+#     except Exception as e:
+#         print(e)
+#     return render(request, 'articles/article_detail.html', locals())
 
 
 @csrf_exempt
@@ -40,7 +71,7 @@ def author_detail(request, author_id):
         # res = models.articleUser.objects.get(article_id=author_id, user_id=request.user)
     except Exception as e:
         print(e)
-    return render(request, 'article/author_detail.html', locals())
+    return render(request, 'articles/author_detail.html', locals())
 
 
 def article_category(request, category_id):
@@ -49,7 +80,7 @@ def article_category(request, category_id):
     """
     articles = Book.objects.filter(category_id=category_id)
 
-    return render(request, 'article/index.html', locals())
+    return render(request, 'articles/index.html', locals())
 
 
 def article_type(request, type):
@@ -59,7 +90,7 @@ def article_type(request, type):
     page = request.GET.get('page')
     articles = paginator.get_page(page)
 
-    return render(request, 'article/index.html', locals())
+    return render(request, 'articles/index.html', locals())
 
 
 @csrf_exempt
@@ -114,7 +145,7 @@ def article_add(request):
             print(e)
             return HttpResponse('{"status":"fail"}', content_type='application/json')
     else:
-        return render(request, 'article/add.html', locals())
+        return render(request, 'articles/add.html', locals())
 
 
 @csrf_exempt
@@ -152,7 +183,7 @@ def article_support(request):
         else:
             return HttpResponse('{"status":"error"}', content_type='application/json')
     else:
-        return render(request, 'article/article_detail.html', locals())
+        return render(request, 'articles/article_detail.html', locals())
 
 
 @csrf_exempt
@@ -181,7 +212,7 @@ def article_collect(request):
                 print(e)
                 return HttpResponse('{"status":"fail"}', content_type='application/json')
     else:
-        return render(request, 'article/article_detail.html', locals())
+        return render(request, 'articles/article_detail.html', locals())
 
 
 @csrf_exempt
@@ -209,7 +240,7 @@ def article_edit(request, article_id):
             print(e)
             return HttpResponse('{"status":"fail"}', content_type='application/json')
     else:
-        return render(request, 'article/edit.html', locals())
+        return render(request, 'articles/edit.html', locals())
 
 
 @csrf_exempt
@@ -220,23 +251,23 @@ def article_search(request):
     page = request.GET.get('page')
     pks = paginator.get_page(page)
 
-    return render(request, 'article/index.html', locals())
+    return render(request, 'articles/index.html', locals())
 
 
 @csrf_exempt
 def about(request):
 
-    return render(request, 'article/about.html', locals())
+    return render(request, 'articles/about.html', locals())
 
 
 @csrf_exempt
 def google_search(request):
 
-    return render(request, 'article/google7c5c39bd4748d567.html', locals())
+    return render(request, 'articles/google7c5c39bd4748d567.html', locals())
 
 
 @csrf_exempt
 def baidu_search(request):
 
-    return render(request, 'article/baidu_verify_Z85YzIi6cp.html', locals())
+    return render(request, 'articles/baidu_verify_Z85YzIi6cp.html', locals())
 

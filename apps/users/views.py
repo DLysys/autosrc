@@ -47,7 +47,7 @@ def register(request):
                 content = "<div class=\"normal\">新用户注册成功，邮箱名：%s </div>" % email
                 wechat.send_msg(title, content)
 
-    return render(request, 'register.html', locals())
+    return render(request, 'users/register.html', locals())
 
 
 def captcha_refresh(request):
@@ -111,7 +111,7 @@ def login_site(request):
 
             form = forms.SigninForm()
 
-    return render(request, 'login.html', locals())
+    return render(request, 'users/login.html', locals())
 
 
 @csrf_protect
@@ -144,7 +144,7 @@ def find_pass(request):
             form = forms.ResetpsdRequestForm()
         return render(request, 'RBAC/resetpsdquest.html', {'form': form, 'error': error})
     else:
-        return render(request, 'forget.html')
+        return render(request, 'users/forget.html')
         # resetpsd = get_object_or_404(models.UserResetpsd,)
         # if resetpsd:
         #     email_get = resetpsd.email
@@ -224,7 +224,7 @@ def user_home(request, user_id):
         print(e)
     # assets = Asset.objects.filter(asset_manager_id=user_id)
     # tasks = Task.objects.filter(task_user_id=user_id)
-    return render(request, 'home.html', locals())
+    return render(request, 'users/home.html', locals())
 
 
 @login_required
@@ -235,7 +235,7 @@ def user_center(request):
     user = request.user
     my_books = ArticleUser.objects.filter(user=user, collect=True)
 
-    return render(request, 'center.html', locals())
+    return render(request, 'users/center.html', locals())
 
 
 @login_required
@@ -243,7 +243,7 @@ def user_set(request):
     """
     用户配置
     """
-    return render(request, 'set.html')
+    return render(request, 'users/set.html')
 
 
 @login_required
@@ -340,7 +340,7 @@ def change_password(request):
                     # data['message'] = u'修改密码成功，请牢记新密码'
                     # return render_to_response('message.html', data)
 
-    return render(request, 'set.html', locals())
+    return render(request, 'users/set.html', locals())
 
 
 def clean_pwd_2(self):

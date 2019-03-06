@@ -1,4 +1,4 @@
-{% extends 'super.html' %}
+{% extends 'share_layout/super.html' %}
 {% load article_tag %}
 {% block title %}详细{% endblock %}
 
@@ -30,7 +30,7 @@
           </div>
           <span class="fly-list-nums"> 
             <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i>{{ comments|length }}</a>
-            <i class="iconfont" title="人气">&#xe60b;</i> {{ article.viewed|default:0 }}
+            <i class="iconfont" title="人气">&#xe60b;</i> {{ article.views|default:0 }}
           </span>
         </div>
         <div class="detail-about">
@@ -166,7 +166,7 @@
                     </div>
               </form>
             {% else %}
-                <p>请<a href="{% url 'users:login' %}?next={% url 'articles:article_detail' article_id %}">登录</a>后再添加评论。</p>
+                <p>请<a href="{% url 'users:login' %}?next={{ article.get_absolute_url }}">登录</a>后再添加评论。</p>
             {% endif %}
         </div>
       </div>
