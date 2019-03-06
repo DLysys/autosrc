@@ -11,6 +11,7 @@ django-simple-captcha
 defusedxml==0.5.0
 django-crontab==0.7.1
 django-haystack==2.8.1
+django-pagedown
 html5lib==1.0.1
 idna==2.6
 jieba==0.39

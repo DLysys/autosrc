@@ -1,8 +1,19 @@
 from django.contrib import admin
 from .models import Book, Category, Chapter, Author, Article
+from pagedown.widgets import AdminPagedownWidget
+from django import forms
+
+
+class ArticleForm(forms.ModelForm):
+    content = forms.CharField(widget=AdminPagedownWidget())
+
+    class Meta:
+        model = Article
+        fields = '__all__'
 
 
 class ArticleAdmin(admin.ModelAdmin):
+    form = ArticleForm
     list_display = ['title', 'author', 'c_time', 'type']
     list_filter = ['title', 'author', 'type']
     search_fields = ('title', 'author', 'type',)

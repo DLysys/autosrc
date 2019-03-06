@@ -29,9 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'apps.articles',
     'apps.users',
-    # 'spider_book',
     'captcha',
-    
+    'pagedown',
 ]
 
 MIDDLEWARE = [
