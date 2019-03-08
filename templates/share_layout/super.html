@@ -1,115 +1,76 @@
-{% extends 'share_layout/base.html' %}
 {% load staticfiles %}
-{% block body %}
-    <div class="layui-container">
-      <div class="layui-row layui-col-space15">
-        {% block content %}{% endblock %}
-        <div class="layui-col-md4">
-{#          <div class="fly-panel fly-signin">#}
-{#            <div class="fly-panel-title">#}
-{#              签到#}
-{#              <i class="fly-mid"></i>#}
-{#              <a href="javascript:;" class="fly-link" id="LAY_signinHelp">说明</a>#}
-{#              <i class="fly-mid"></i>#}
-{#              <a href="javascript:;" class="fly-link" id="LAY_signinTop">活跃榜<span class="layui-badge-dot"></span></a>#}
-{#              <span class="fly-signin-days">已连续签到<cite>16</cite>天</span>#}
-{#            </div>#}
-{#            <div class="fly-panel-main fly-signin-main">#}
-{#              <button class="layui-btn layui-btn-danger" id="LAY_signin">今日签到</button>#}
-{#              <span>可获得<cite>5</cite>飞吻</span>#}
-{##}
-{#              <!-- 已签到状态 -->#}
-{#              <!--#}
-{#              <button class="layui-btn layui-btn-disabled">今日已签到</button>#}
-{#              <span>获得了<cite>20</cite>飞吻</span>#}
-{#              -->#}
-{#            </div>#}
-{#          </div>#}
-          <div class="fly-panel">
-            <h3 class="fly-panel-title">书籍分类</h3>
-            <ul class="fly-panel-main fly-list-static">
-                {% for cate in cates %}
-                  <li>
-                    <a href="{% url 'articles:article_category' cate.id %}">{{ cate.name }} ({{ cate.books|length }})</a>
-                  </li>
-                {% endfor %}
-            </ul>
-          </div>
-        <dl class="fly-panel fly-list-one">
-            <dt class="fly-panel-title">最热书籍</dt>
-{#            {% for hk in hot_books %}#}
-{#                <dd>#}
-{#                  <a href="{% url 'books:book_detail' hk.book_id %}">{{ hk.title }}</a>#}
-{#                  <span><i class="iconfont icon-pinglun1"></i>{{ hk.num_books }}</span>#}
-{#                </dd>#}
-{#            {% endfor %}#}
-        </dl>
-        <dl class="fly-panel fly-list-one">
-            <dt class="fly-panel-title">热议</dt>
-{#            {% for hk in hot_books %}#}
-{#                <dd>#}
-{#                  <a href="{% url 'books:book_detail' hk.book_id %}">{{ hk.title }}</a>#}
-{#                  <span><i class="iconfont icon-pinglun1"></i>{{ hk.num_books }}</span>#}
-{#                </dd>#}
-{#            {% endfor %}#}
-        </dl>
-        <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
-            <h3 class="fly-panel-title">积分排行</h3>
-            <dl>
-              <!--<i class="layui-icon fly-loading">&#xe63d;</i>-->
-                {% for hu in hot_users %}
-                  <dd>
-                    <a href="{% url 'users:user_home' hu.user_id %}">
-                        {% if hu.avatar %}
-                            <img src="/media/{{ hu.avatar }}" alt="用户头像">
-                        {% else %}
-                            <img src="/media/avatar/default.png" alt="默认头像">
-                        {% endif %}
-                        <cite>{{ hu.username }}</cite><i>{{ hu.point }}</i>
-                    </a>
-                  </dd>
-                {% endfor %}
-            </dl>
-          </div>
-{#          <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">#}
-{#            <h3 class="fly-panel-title">回贴排行</h3>#}
-{#            <dl>#}
-{#              <!--<i class="layui-icon fly-loading">&#xe63d;</i>-->#}
-{#                {% for hu in hot_users %}#}
-{#                  <dd>#}
-{#                    <a href="{% url 'users:user_home' hu.user_id %}">#}
-{#                        {% if hu.avatar %}#}
-{#                            <img src="/media/{{ hu.avatar }}"><cite>{{ hu.username }}</cite><i>{{ hu.num_comments }}</i>#}
-{#                        {% else %}#}
-{#                            <img src="/media/avatar/default.png">#}
-{#                        {% endif %}#}
-{#                    </a>#}
-{#                  </dd>#}
-{#                {% endfor %}#}
-{#            </dl>#}
-{#          </div>#}
-
-          <div class="fly-panel" style="padding: 20px 0; text-align: center;">
-            <div class="fly-panel-title">
-              支持我
-            </div>
-            <div class="fly-panel-main">
-                <img src="{% static 'images/dashang.png' %}" alt="打赏">
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Merak | 首页{% endblock %}</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}" media="all">
+  <script src="https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc"></script><script>
+  /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
+  </script>
+    <link id="layuicss-layer" rel="stylesheet" href="{% static 'layui/css/modules/layer/default/layer.css' %}" media="all">
+    <link id="layuicss-layuiAdmin" rel="stylesheet" href="{% static 'css/admin.css' %}" media="all">
+      <link rel="stylesheet" href="{% static 'css/global.css' %}">
+</head>
+<body layadmin-themealias="default" class="layui-layout-body" style="margin-top: 0">
+  <div id="LAY_app" class="layadmin-tabspage-none">
+      <div class="layui-layout layui-layout-admin">
+          {# 主体内容全放到这里！#}
+          <div class="layadmin-tabsbody-item layui-show">
+            <div class="layui-fluid">
+                {% block content %}{% endblock %}
             </div>
           </div>
-
-{#          <div class="fly-panel fly-link">#}
-{#            <h3 class="fly-panel-title">友情链接</h3>#}
-{#            <dl class="fly-panel-main">#}
-{#              <dd><a href="http://www.layui.com/" target="_blank">layui</a><dd>#}
-{#              <dd><a href="http://layim.layui.com/" target="_blank">WebIM</a><dd>#}
-{#              <dd><a href="http://layer.layui.com/" target="_blank">layer</a><dd>#}
-{#              <dd><a href="http://www.layui.com/laydate/" target="_blank">layDate</a><dd>#}
-{#              <dd><a href="mailto:xianxin@layui-inc.com?subject=%E7%94%B3%E8%AF%B7Fly%E7%A4%BE%E5%8C%BA%E5%8F%8B%E9%93%BE" class="fly-link">申请友链</a><dd>#}
-{#            </dl>#}
-{#          </div>#}
-
-        </div>
       </div>
-    </div>
-{% endblock %}
+  </div>
+  <script src="{% static 'layui/layui.js' %}"></script>
+  <script src="{% static 'layui/lay/modules/jquery.js' %}"></script>
+  <script src="{% static 'layui/lay/modules/layer.js' %}"></script>
+  <script src="{% static 'layui/layui.all.js' %}"></script>
+  <script type="text/javascript" src="{% static 'layui/jquery-2.2.3.min.js' %}"></script>
+<script>
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+    var isShow = true;  //定义一个标志位
+    $('.layadmin-flexible').click(function(){
+        //选择出所有的span，并判断是不是hidden
+        $('.layui-nav-item span').each(function(){
+            if($(this).is(':hidden')){
+                $(this).show();
+            }else{
+                $(this).hide();
+            }
+        });
+        //判断isshow的状态
+        if(isShow){
+            $('.layui-side.layui-side-menu').width(60); //设置宽度
+            $('.kit-side-fold i').css('margin-right', '70%');  //修改图标的位置
+            //将footer和body的宽度修改
+            $('.layui-side-scroll.layui-body').css('left', 60+'px');
+            $('.layui-side-scroll.layui-footer').css('left', 60+'px');
+            //将二级导航栏隐藏
+            $('dd span').each(function(){
+                $(this).hide();
+            });
+            //修改标志位
+            isShow =false;
+        }else{
+            $('.layui-side.layui-side-menu').width(200);
+            $('.kit-side-fold i').css('margin-right', '10%');
+            $('.layui-body').css('left', 200+'px');
+            $('.layui-footer').css('left', 200+'px');
+            $('dd span').each(function(){
+                $(this).show();
+            });
+            isShow =true;
+        }
+    });
+
+</script>
+  {% block script %}{% endblock %}
+</body>
+</html>

@@ -66,8 +66,8 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
 
     var page = function(now){
       var curr = now || 1;
-      if(gather.minelog[type + '-page-' + curr]){
-        view(gather.minelog[type + '-page-' + curr]);
+      if(gather.minelog[type + '-companies-' + curr]){
+        view(gather.minelog[type + '-companies-' + curr]);
       } else {
         //我收藏的帖
         if(type === 'collection'){
@@ -95,7 +95,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
             };
 
             render(curr)
-            gather.minelog['collect-page-' + curr] = res;
+            gather.minelog['collect-companies-' + curr] = res;
 
             now || laypage.render({
               elem: 'LAY_page1'
@@ -113,7 +113,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
             page: curr
           }, function(res){
             view(res);
-            gather.minelog['mine-jie-page-' + curr] = res;
+            gather.minelog['mine-jie-companies-' + curr] = res;
             now || laypage.render({
               elem: 'LAY_page'
               ,count: res.count

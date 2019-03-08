@@ -27,6 +27,7 @@ PyMySQL
 pyparsing==2.2.0
 Pyphen==0.9.4
 pytz==2018.3
+python-memcached
 requests==2.18.4
 selenium==3.11.0
 six==1.11.0

@@ -14,10 +14,10 @@ import os
 logger = logging.getLogger(__name__)
 
 
-# def get_max_articleid_commentid():
-#     from apps.articles.models import Article
+# def get_max_companyid_commentid():
+#     from apps.companies.models import company
     # from comments.models import Comment
-    # return (Article.objects.latest().pk, Comment.objects.latest().pk)
+    # return (company.objects.latest().pk, Comment.objects.latest().pk)
 
 
 def get_md5(str):
@@ -180,15 +180,15 @@ def get_bodhi_setting():
     if value:
         return value
     else:
-        from apps.articles.models import SiteSettings
+        from apps.companies.models import SiteSettings
         if not SiteSettings.objects.count():
             setting = SiteSettings()
             setting.sitename = '学习网'
             setting.site_description = '学习网络安全'
             setting.site_seo_description = '信息安全，网络攻防'
             setting.site_keywords = 'Django,Python'
-            setting.article_sub_length = 300
-            setting.sidebar_article_count = 10
+            setting.company_sub_length = 300
+            setting.sidebar_company_count = 10
             setting.sidebar_comment_count = 5
             setting.show_google_adsense = False
             setting.open_site_comment = True

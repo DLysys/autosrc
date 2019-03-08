@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}任务列表{% endblock %}
+
+{% block css %}
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'css/AdminLTE.min.css' %}">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="{% static 'css/skins/_all-skins.min.css' %}">
+    <style type="text/css">
+    #task_table td, td p{
+        vertical-align: middle;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <h1>任务列表 ({{ tasks|length }})
+            <span class="l">
+                <a href="javascript:;" onclick="task_add('添加新任务','{% url "task:task_add_edit" %}', '800','600')"  class="btn btn-primary pull-right"><i class="Hui-iconfont">&#xe600;</i> 添加新任务</a>
+            </span>
+        </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-header"></div>
+                    <div class="box-body">
+                        <table id="task_table" class="table table-bordered table-striped merak_data_list_table">
+                            <thead>
+                                <tr>
+                                    <td style="min-width: 80px"><b>任务名称</b></td>
+                                    <td class="search-column" style="min-width: 80px"><b>任务类型</b></td>
+                                    <td style="min-width: 80px"><b>扫描目标</b></td>
+                                    <td class="search-column" style="min-width: 80px"><b>任务状态</b></td>
+                                    <td style="min-width: 80px"><b>创建时间</b></td>
+                                    <td class="search-column" style="min-width: 80px"><b>创建人员</b></td>
+                                    <td style="min-width: 80px"><b>任务操作</b></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for task in tasks %}
+                                <tr>
+                                    <td>{{task.task_name}}</td>
+                                    <td>{{task.scan_type.scan_type_name}}</td>
+                                    <td>{{task.target_address}}</td>
+                                    <td>
+                                        {% if task.task_status == 'pending' %}
+                                            <span class="text-aqua">{{task.get_task_status_display}}</span>
+                                        {% elif task.task_status == 'running' %}
+                                            <span class="text-light-blue">{{task.get_task_status_display}}</span>
+                                            <i class="fa fa-spin fa-refresh text-light-blue" style="margin-left: 5px;"></i>
+                                        {% elif task.task_status == 'paused' %}
+                                            <span class="text-yellow">{{task.get_task_status_display}}</span>
+                                        {% elif task.task_status == 'completed' %}
+                                            <span class="text-green">{{task.get_task_status_display}}</span>
+{#                                            {% if task.is_error %}#}
+{#                                                <i class="fa fa-exclamation-triangle text-danger"></i>#}
+{#                                            {% endif %}#}
+                                        {% elif task.task_status == 'stopping' %}
+                                            <span class="text-navy">{{task.get_task_status_display}}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{task.task_starttime}}</td>
+                                    <td>{{ task.task_user.profile.chinese_name }}</td>
+                                    <td style="text-align: center;">
+{#                                        <i class="Hui-iconfont">&#xe6e5;</i>暂停#}
+{#                                        <i class="Hui-iconfont">&#xe6e4;</i>停止#}
+{#                                        <i class="Hui-iconfont">&#xe631;</i>停用#}
+{#                                        <i class="Hui-iconfont">&#xe6e1;</i>完成#}
+                                        <a class="btn-link margin-r-5" title="任务编辑" href="javascript:;" onclick="task_edit('任务编辑','{% url "task:task_add_edit" %}?task_id={{ task.id }}','800','550', '{{ task.task_status }}')"><i class="Hui-iconfont">&#xe6df;</i>编辑</a>
+                                        <a class="btn-link margin-r-5" title="任务删除" href="javascript:;" onclick="task_del(this, '{% url "task:task_del" %}',{{ task.id }})"><i class="Hui-iconfont">&#xe6e2;</i>删除</a>
+                                        {% if task.task_status == 'running'%}
+                                            <a id="task_status-a" class="btn-link margin-r-5" title="点击停止" href="javascript:;" onclick="task_action(this, '{% url "task:task_action" %}',{{ task.id }}, 'stopping', '已停止')"><i class="Hui-iconfont">&#xe6e4;</i>停止</a>
+                                        {% else %}
+                                            <a id="task_status-a" class="btn-link margin-r-5" title="点击执行" href="javascript:;" onclick="task_action(this, '{% url "task:task_action" %}',{{ task.id }}, 'running', '已运行')"><i class="Hui-iconfont">&#xe6e6;</i>执行</a>
+                                        {% endif %}
+                                            <a class="btn-link margin-r-5" title="任务详情" href="{% url 'task:task_detail' %}?task_id={{ task.id }}"><i class="Hui-iconfont">&#xe627;</i>详情</a>
+{#                                        <a class="btn-link margin-r-5" title="任务详情" href="javascript:;" onclick="task_detail('任务详情','{% url "task:task_detail" %}?task_id={{ task.id }}','800','550')"><i class="Hui-iconfont">&#xe627;</i>详情</a>#}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+{% endblock %}
+
+{% block script %}
+    <!-- DataTables -->
+    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+    <!-- SlimScroll -->
+    <script src="{% static 'plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static 'plugins/fastclick/fastclick.js' %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static 'js/app.min.js' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'js/demo.js' %}"></script>
+    <!-- page script -->
+    <script type="text/javascript">
+        /*任务-添加*/
+        function task_add(title, url, w, h) {
+            layer_show(title, url, w, h);
+        }
+
+        /*任务-删除*/
+        function task_del(obj, url, id) {
+            layer.confirm('确认要删除吗？', function (index) {
+                //此处请求后台程序，下方是成功后的前台处理……
+                $.ajax({
+                    type: "POST",//方法类型
+                    dataType: "json",//预期服务器返回的数据类型
+                    url: url,//url
+                    data: {"task_id": id, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                    success: function (result) {
+                        if (result.status == 200) {
+                            $(obj).parents("tr").remove();
+                            layer.close(index);
+                            //layer.alert('删除成功', {icon: 6}, function (index) {
+                            //        parent.location.reload();
+                            //    }
+                            //);
+                        } else {
+                            layer.alert('删除失败', {icon: 5}, function (index) {
+                                    layer.close(index);
+                                }
+                            );
+                        }
+                    },
+                    error: function () {
+                        layer.alert('删除异常', {icon: 5});
+                    }
+                });
+            });
+        }
+        /*任务-执行*/
+        function task_action(obj, url, id, status, display) {
+            layer.confirm('该操作为敏感操作，点击确认，执行操作!',function(index){
+                //此处请求后台程序，下方是成功后的前台处理……
+                {#var action = ['run', 'pause', 'stop', 'resume', 'run'];#}
+                {#var action = ['run', 'stop', 'stop', 'resume', 'run'];#}
+                {#var result = ['已执行...', '已暂停', '已停止', '已再次执行...', '操作失败，请重试123'];#}
+                var loadding_task = layer.load(1, {
+                    shade: [0.1, '#fff'] //0.1透明度的白色背景
+                });
+                $.ajax({
+                    type: "POST",//方法类型
+                    dataType: "json",//预期服务器返回的数据类型
+                    url: url,//url
+                    data: {"task_id": id, 'task_action': status, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                    success: function (data) {
+                        layer.close(loadding_task);
+                        if (data.code == 200) {
+                            layer.msg(display,{icon: 6,time:1000},function(index){
+                                    parent.location.reload();
+                                }
+                            );
+                        }else{
+                            layer.alert('操作失败，当前任务为找到', {icon: 5}, function(index){
+                                    layer.close(index);
+                                }
+                            );
+                        }
+                    },
+                    error : function() {
+                        layer.close(loadding_task);
+                        layer.alert('操作异常', {icon: 5});
+                    },
+                });
+            });
+        }
+
+
+        /*任务-编辑*/
+        function task_edit(title,url,w,h,status){
+
+            if(status == "running"){
+                layer.alert('该任务已在执行中，如果需要修改配置，请先停止扫描！', {icon: 2});
+            }else{
+                layer_show(title,url,w,h);
+            }
+        }
+
+        /*任务-编辑*/
+        function task_detail(title,url,w,h){
+            layer_show(title,url,w,h);
+        }
+
+         /*查看报告*/
+        function view_report_pdf(title, url, w, h) {
+            layer_show(title, url, w, h);
+        }
+    </script>
+{% endblock %}

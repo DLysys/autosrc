@@ -27,10 +27,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
-    'apps.articles',
+    'apps.companies',
     'apps.users',
     'captcha',
     'pagedown',
+    'apps.tasks',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +57,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'apps.articles.context_processors.add_variable_to_context',
+                'apps.companies.context_processors.add_variable_to_context',
             ],
         },
     },
@@ -67,7 +68,7 @@ WSGI_APPLICATION = 'ProjectSettings.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bodhi',
+        'NAME': 'autosrc',
         'USER': 'root',
         'PASSWORD': DB_PASS,
         'HOST': '127.0.0.1',

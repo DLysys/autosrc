@@ -1,0 +1,272 @@
+{% extends 'share_layout/super.html' %}
+{% load staticfiles %}
+
+{% block title %}任务信息编辑{% endblock %}
+
+{% block content %}
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="app-content-list">
+                    <div class="layui-form-item">
+                        <form action="{% url 'tasks:task_add_edit' %}"  id="form-task-add-edit" method="post" class="" enctype="multipart/form-data" accept-charset="utf-8">{% csrf_token %}
+                            <div class="layui-row layui-col-space15 layui-form-item">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">任务类型：</label>
+                                    <div class="layui-input-block">
+                                        <select lay-verify="required" name="class" lay-filter="column" id="s_type">
+                                          <option></option>
+                                            {% for t in stypes %}
+                                                <option value="{{ t.0 }}" id="L_type">{{ t.1 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">任务名称：</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="L_title" name="title" required lay-verify="required" class="layui-input">
+                                    </div>
+                                </div>
+{#                            <div class="box-body"  id="scaner-host">#}
+{#                                <div class="form-group">#}
+{#                                    <label class="col-sm-3 control-label" for="task_policy_id"><span class="text-red">*</span>工具：</label>#}
+{#                                    <div class="box-group col-sm-7 border-dark" id="policy_checkbox" style="border: 1px solid #ccc;padding-top: 5px;padding-bottom: 5px;">#}
+{#                                        {% for p in policy %}#}
+{#                                        <div class="check-box">#}
+{#                                            {% if p.checked == 1 %}#}
+{#                                            <input type="checkbox" name="policy_id" checked="checked" value="{{ p.id }}" id="checkbox-{{ p.id }}" datatype="*" errormsg="请选择是否已开" style="margin: 10px;">#}
+{#                                            {% else %}#}
+{#                                            <input type="checkbox" name="policy_id" value="{{ p.id }}" id="checkbox-{{ p.id }}" datatype="*" errormsg="请选择是否已开" style="margin: 10px;">#}
+{#                                            {% endif %}#}
+{#                                            <label for="checkbox-{{ p.id }}">{{ p.policy_alias }}</label>#}
+{#                                        </div>#}
+{#                                        {% endfor %}#}
+{#                                    </div>#}
+{#                                    <div class="col-sm-3"></div>#}
+{#                                </div>#}
+{#                                <div class="form-group">#}
+{#                                    <label class="col-sm-3 control-label" for="task_name"><span class="text-red">*</span>任务名称：</label>#}
+{#                                    <div class="col-sm-7 formControls input-group">#}
+{#                                        <input name="task_id" type="hidden" value="{{task.id}}">#}
+{#                                        <input name="task_name" type="text" id="task_name" value="{{task.task_name}}" class="form-control" placeholder="任务名称，一般以系统名称+版本+日期" datatype="*" nullmsg="任务名称，一般以系统名称+版本+日期">#}
+{#                                    </div>#}
+{#                                    <div class="col-sm-3"></div>#}
+{#                                </div>#}
+{#                                <div class="form-group">#}
+{#                                    <label class="col-sm-3 control-label" for="target_address"><span class="text-red">*</span>任务目标：</label>#}
+{#                                    <div class="col-sm-7 formControls input-group">#}
+{#                                        <input name="target_address" type="text" id="target_address" value="{{task.target_address}}" class="form-control" placeholder="扫描目标 ip/url:192.168.1.1-192.168.1.5,192.168.2.0/24,test.com" datatype="*" nullmsg="输入扫描目标 ip/url:192.168.1.1-192.168.1.5,192.168.2.0/24,test.com">#}
+{#                                    </div>#}
+{#                                    <div class="col-sm-3"></div>#}
+{#                                </div>#}
+{#                                <div class="from-group-user_info" style="display: {% if task.scan_type.has_user_info %}block{% else %}none{% endif %};">#}
+{#                                    <div class="form-group">#}
+{#                                        <label class="col-sm-3 control-label" for="target_username">目标用户：</label>#}
+{#                                        <div class="col-sm-7 formControls input-group">#}
+{#                                            <input name="target_username" type="text" id="target_username" value="{{task.target_username}}" class="form-control" placeholder="任务目标用户">#}
+{#                                        </div>#}
+{#                                        <div class="col-sm-3"></div>#}
+{#                                    </div>#}
+{#                                    <div class="form-group">#}
+{#                                        <label class="col-sm-3 control-label" for="target_password">目标密码：</label>#}
+{#                                        <div class="col-sm-7 formControls input-group">#}
+{#                                            <input name="target_password" type="password" id="target_password" value="{{task.target_password}}" class="form-control" placeholder="任务目标密码">#}
+{#                                        </div>#}
+{#                                        <div class="col-sm-3"></div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="form-group">#}
+{#                                    <label class="col-sm-3 control-label" for="task_des">任务描述：</label>#}
+{#                                    <div class="col-sm-7 formControls input-group">#}
+{#                                        <textarea name="task_des" id="task_des" class="form-control" rows="2" placeholder="本次任务说明，如漏洞复查，周期检查、版本更新、上线准备等 ...">{{task.task_des}}</textarea>#}
+{#                                    </div>#}
+{#                                    <div class="col-sm-3"></div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="box-footer">#}
+{#                                <button type="submit" class="btn btn-primary center-block"><i class="fa fa-credit-card"></i> 提交 </button>#}
+{#                            </div>#}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <div style="padding-bottom: 10px;">
+                        <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
+                        <button class="layui-btn layuiadmin-btn-useradmin" data-type="add" onclick="add_task()">添加</button>
+                    </div>
+                    <div class="layui-form">
+                          <table class="layui-table">
+                            <thead>
+                              <tr>
+                                <th>ID</th>
+                                <th>任务名称</th>
+                                  <th>类型</th>
+                                <th>目标</th>
+                                  <th>状态</th>
+                                <th>创建用户</th>
+                                <th class="search-column">创建时间</th>
+                                <th>操作</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for task in tasks %}
+                                <tr>
+                                    <td>{{ task.id }}</td>
+                                    <td>{{ task.task_name }}</td>
+                                    <td>{{ task.scan_type.scan_type_name }}</td>
+                                    <td>{{ task.target_address }}</td>
+                                    <td data-field="id" data-key="2-0-1" class="">
+                                        {% if task.task_status == 'pending' %}
+                                            {{task.get_task_status_display}}
+                                        {% elif task.task_status == 'running' %}
+                                            {{task.get_task_status_display}}
+                                        {% elif task.task_status == 'paused' %}
+                                            {{task.get_task_status_display}}
+                                        {% elif task.task_status == 'completed' %}
+                                            {{task.get_task_status_display}}
+                                        {% elif task.task_status == 'stopping' %}
+                                            {{task.get_task_status_display}}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ task.task_user.profile.chinese_name }}</td>
+                                    <td>{{ task.task_starttime }}</td>
+                                    <td>
+                                        <div class="layui-btn-group">
+                                            <button class="layui-btn layui-btn-primary layui-btn-sm">扫描</button>
+                                          <button class="layui-btn layui-btn-primary layui-btn-sm">
+                                            <i class="layui-icon">&#xe642;</i>
+                                          </button>
+                                          <button class="layui-btn layui-btn-primary layui-btn-sm">
+                                            <i class="layui-icon">&#xe640;</i>
+                                          </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                    <div class="pagination">
+                            <span class="step-links">
+                                {% if tasks.has_previous %}
+                                    <a class="layui-btn" href="{% url 'tasks:asset_list' 1 %}">第一页</a>
+                                    <a class="layui-btn" href="{% url 'tasks:asset_list' tasks.previous_page_number %}"><i class="layui-icon">&#xe65a;</i></a>
+                                {% endif %}
+
+                                <span class="current">
+                                    <button class="layui-btn">
+                                        第 {{ tasks.number }}页  共 {{ tasks.paginator.num_pages }}页
+                                    </button>
+                                </span>
+
+                                {% if tasks.has_next %}
+                                    <a class="layui-btn" href="{% url 'tasks:asset_list' tasks.next_page_number %}"><i class="layui-icon">&#xe65b;</i></a>
+                                    <a class="layui-btn" href="{% url 'tasks:asset_list' tasks.paginator.num_pages %}">最后一页</a>
+                                {% endif %}
+                            </span>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <!-- SlimScroll -->
+    <script src="{% static 'plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static 'plugins/fastclick/fastclick.js' %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static 'js/app.min.js' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'js/demo.js' %}"></script>
+    <script type="text/javascript" src="/static/plugins/Validform/5.3.2/Validform_v5.3.2.js"></script>
+    <!-- page script -->
+    <script type="text/javascript">
+
+        $(function () {
+                // jquery 增加通用格式化方法
+            $.format = function (source, params) {
+                if (arguments.length == 1)
+                    return function () {
+                        var args = $.makeArray(arguments);
+                        args.unshift(source);
+                        return $.format.apply(this, args);
+                    };
+                if (arguments.length > 2 && params.constructor != Array) {
+                    params = $.makeArray(arguments).slice(1);
+                }
+                if (params.constructor != Array) {
+                    params = [params];
+                }
+                $.each(params, function (i, n) {
+                    source = source.replace(new RegExp("\\{" + i + "\\}", "g"), n);
+                });
+                return source;
+            };
+
+
+            $("#scan_type_id").change(function () {
+                var id = $(this).val();
+                $.post("{% url 'tasks:change_scan_type' %}", {"scan_type_id": id, 'csrfmiddlewaretoken': '{{ csrf_token }}'}, function (result) {
+                    if (result.status == 200) {
+                        var cb = '<div class="check-box"><input type="checkbox" name="policy_id" value="{0}" id="checkbox-{0}"><label for="checkbox-{0}">{1}</label></div>';
+                        var cbs = result.policy.map(function (p) {
+                            return $.format(cb, p.pk, p.fields.policy_alias);
+                        }).join(" ");
+                        $("#policy_checkbox").html(cbs);
+
+                        $(".from-group-user_info").css('display', result.has_user_info);
+
+                        {#console.log(result);#}
+
+                        if(result.has_user_info){
+                            $(".from-group-user_info").css('display', 'block');
+                        }else{
+                            $(".from-group-user_info").css('display', 'none');
+                        }
+                    }
+                });
+            });
+
+            //
+            $("#form-tasks-add-edit").Validform({
+                tiptype: 3, callback: function (form) {
+                    console.log("==> option project");
+                    console.log($("#form-tasks-add-edit").attr("action"));
+                    var ld;
+                    $.ajax({
+                        type: "POST",//方法类型
+                        dataType: "json",//预期服务器返回的数据类型
+                        url: $("#form-tasks-add-edit").attr("action"),//url
+                        data: $('#form-tasks-add-edit').serialize(),
+                        beforeSend: function () {
+                            ld = layer.load(1);
+                        },
+                        success: function (result) {
+                            layer.close(ld);
+                            if (result.status == 200) {
+                                layer.alert(result.msg, {icon: 6}, function (index) {
+                                        parent.location.reload();
+                                    }
+                                );
+                            } else {
+                                layer.alert('添加失败', {icon: 5}, function (index) {
+                                        layer.close(index);
+                                    }
+                                );
+                            }
+                        },
+                        error: function () {
+                            layer.close(ld);
+                            layer.alert('操作异常', {icon: 5});
+                        }
+                    });
+                    return false;
+                }
+            });
+        });
+    </script>
+{% endblock %}

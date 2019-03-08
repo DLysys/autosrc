@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}项目报告{% endblock %}
+
+{% block css %}
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'css/AdminLTE.min.css' %}">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="{% static 'css/skins/_all-skins.min.css' %}">
+    <link rel="stylesheet" href="/static/plugins/hui-iconfont/1.0.1/iconfont.css">
+{#    <script type="text/javascript" src="/static/plugins/Validform/5.3.2/Validform_v5.3.2.js"></script>#}
+{% endblock %}
+
+{% block content %}
+
+    <section class="content-header">
+        <h1>项目报告<small>项目总数（{{ projects|length }}）</small>
+            <span class="l">
+                <a href="javascript:;" onclick="project_add('添加新项目','{% url "report:project_add_edit" %}','800','450')"  class="btn btn-primary pull-right"><i class="Hui-iconfont">&#xe600;</i> 添加新项目</a>
+            </span>
+        </h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-header"></div>
+                    <div class="box-body">
+                        <table id="project_table" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <td style="min-width: 200px"><b>项目名称</b></td>
+                                    <td style="min-width: 100px"><b>项目时间</b></td>
+                                    <td style="min-width: 150px"><b>项目负责人</b></td>
+                                    <td style="min-width: 80px"><b>项目说明</b></td>
+                                    <td style="min-width: 80px"><b>项目详情</b></td>
+                                    <td style="min-width: 80px"><b>导出报告</b></td>
+                                    <td style="min-width: 120px;text-align: center;"><b>操作</b></td>
+{#                                    <td><b>导出报告</b></td>#}
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for project in projects %}
+                                <tr class="model-user">
+                                    <td scope="row">{{ project.p_name }}</td>
+                                    <td>{{ project.p_time }}</td>
+                                    <td>{{ project.p_charge }}</td>
+                                    <td>{{ project.p_explain }}</td>
+                                    <td><a href="{% url 'report:project_view' project.id %}">项目详情</a></td>
+                                    <td><a href="{% url 'report:project_word' project.id %}">导出报告</a></td>
+                                    <td class="td-manage" style="text-align: center;">
+                                        <a title="项目编辑" href="javascript:;" onclick="project_edit('项目编辑','{% url "report:project_add_edit" %}?id={{ project.id }}','800','450')" class="ml-5" style="text-decoration:none;margin-right: 50px"><i class="Hui-iconfont">&#xe6df;</i></a>
+                                        <a title="项目删除" href="javascript:;" onclick="project_del(this,'{{ project.id }}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+{#                    <div class="box-footer">#}
+{#                        <div class="cl pd-5 bg-1 bk-gray mt-20">#}
+{#                            <span class="l">共有数据：<strong>{{ agents|length }}</strong> 条</span>#}
+{#                        </div>#}
+{#                    </div>#}
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+{% endblock %}
+
+{% block script %}
+    <!-- DataTables -->
+    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+    <!-- SlimScroll -->
+    <script src="{% static 'plugins/slimScroll/jquery.slimscroll.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static 'plugins/fastclick/fastclick.js' %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static 'js/app.min.js' %}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{% static 'js/demo.js' %}"></script>
+    <!-- page script -->
+    <script type="text/javascript">
+        function project_add(title, url, w, h) {
+            layer_show(title, url, w, h);
+        }
+
+        /*项目-删除*/
+        function project_del(obj,id) {
+            layer.confirm('确认要删除吗？', function (index) {
+                //此处请求后台程序，下方是成功后的前台处理……
+                $.ajax({
+                    type: "POST",//方法类型
+                    dataType: "json",//预期服务器返回的数据类型
+                    url: "{% url 'report:project_del' %}",//url
+                    data: {"project_id": id},
+                    success: function (result) {
+                        if (result.status == 200) {
+                            $(obj).parents("tr").remove();
+                            layer.alert('删除成功', {icon: 6}, function (index) {
+                                    parent.location.reload();
+                                }
+                            );
+                        } else {
+                            layer.alert('删除失败', {icon: 5}, function (index) {
+                                    layer.close(index);
+                                }
+                            );
+                        }
+                    },
+                    error: function () {
+                        layer.alert('删除异常', {icon: 5});
+                    }
+                });
+            });
+        }
+        /*项目-编辑*/
+        function project_edit(title,url,w,h,status){
+            if(status == "True"){
+                layer.alert('请先停用服务，再修改！', {icon: 2});
+            }else{
+                layer_show(title,url,w,h);
+            }
+        }
+
+    </script>
+{% endblock %}

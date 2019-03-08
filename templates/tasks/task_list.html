@@ -1,0 +1,159 @@
+{% extends 'share_layout/base.html' %}
+{% load staticfiles %}
+{% block title %}任务列表{% endblock %}
+{% block content %}
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="app-content-list">
+                    <div class="layui-form-item">
+                        <form class="layui-form" action="{% url 'tasks:task_search' %}" method="get">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">任务名称</label>
+                                <div class="layui-input-inline">
+                                  <input type="text" name="task_name" placeholder="请输入" class="layui-input">
+                                </div>
+                              </div>
+                              <div class="layui-inline">
+                                <label class="layui-form-label">创建人员</label>
+                                <div class="layui-input-inline">
+                                  <input type="text" name="task_user" placeholder="请输入域账号" class="layui-input">
+                                </div>
+                              </div>
+                              <div class="layui-inline">
+                                <button class="layui-btn" lay-submit="" lay-filter="submit" value="搜索" data-type="reload">
+                                  <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                                </button>
+                              </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <div style="padding-bottom: 10px;">
+                        <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
+                        <button class="layui-btn layuiadmin-btn-useradmin" data-type="add" onclick="add_task()">添加</button>
+                    </div>
+                    <div class="layui-form">
+                          <table class="layui-table">
+                            <thead>
+                              <tr>
+                                <th>ID</th>
+                                <th>任务名称</th>
+                                  <th>类型</th>
+                                <th>目标</th>
+                                  <th>状态</th>
+                                <th>创建用户</th>
+                                <th class="search-column">创建时间</th>
+                                <th>操作</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for task in tasks %}
+                                <tr>
+                                    <td>{{ task.id }}</td>
+                                    <td>{{ task.task_name }}</td>
+                                    <td>{{ task.scan_type.scan_type_name }}</td>
+                                    <td>{{ task.target_address }}</td>
+                                    <td data-field="id" data-key="2-0-1" class="">
+                                        {% if task.task_status == 'pending' %}
+                                            {{task.get_task_status_display}}
+                                        {% elif task.task_status == 'running' %}
+                                            {{task.get_task_status_display}}
+                                        {% elif task.task_status == 'paused' %}
+                                            {{task.get_task_status_display}}
+                                        {% elif task.task_status == 'completed' %}
+                                            {{task.get_task_status_display}}
+                                        {% elif task.task_status == 'stopping' %}
+                                            {{task.get_task_status_display}}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ task.task_user.profile.chinese_name }}</td>
+                                    <td>{{ task.task_starttime }}</td>
+                                    <td>
+                                        <div class="layui-btn-group">
+                                            <button class="layui-btn layui-btn-primary layui-btn-sm">扫描</button>
+                                          <button class="layui-btn layui-btn-primary layui-btn-sm">
+                                            <i class="layui-icon">&#xe642;</i>
+                                          </button>
+                                          <button class="layui-btn layui-btn-primary layui-btn-sm">
+                                            <i class="layui-icon">&#xe640;</i>
+                                          </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                    <div class="pagination">
+                            <span class="step-links">
+                                {% if tasks.has_previous %}
+                                    <a class="layui-btn" href="{% url 'tasks:asset_list' 1 %}">第一页</a>
+                                    <a class="layui-btn" href="{% url 'tasks:asset_list' tasks.previous_page_number %}"><i class="layui-icon">&#xe65a;</i></a>
+                                {% endif %}
+
+                                <span class="current">
+                                    <button class="layui-btn">
+                                        第 {{ tasks.number }}页  共 {{ tasks.paginator.num_pages }}页
+                                    </button>
+                                </span>
+
+                                {% if tasks.has_next %}
+                                    <a class="layui-btn" href="{% url 'tasks:asset_list' tasks.next_page_number %}"><i class="layui-icon">&#xe65b;</i></a>
+                                    <a class="layui-btn" href="{% url 'tasks:asset_list' tasks.paginator.num_pages %}">最后一页</a>
+                                {% endif %}
+                            </span>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+{#    <script>#}
+{#        layui.use('laypage', function(){#}
+{#          var laypage = layui.laypage;#}
+{##}
+{#          //执行一个laypage实例#}
+{#          laypage.render({#}
+{#             elem: 'assets_paging' //不用加 # 号#}
+{#            ,count: {{ assets_all|length }} //数据总数，从服务端得到#}
+{#            ,jump: function(obj, first){#}
+{#                  currPage=obj.curr;#}
+{#                  if(!first) {#}
+{#                      alert(currPage);#}
+{#    　　　　　　　　　　window.location.href="{% url 'assets:asset_list' 3 %}";//向URL中传递页数并显示#}
+{#                  }#}
+{#            },#}
+{#          });#}
+{#        });#}
+{#    </script>#}
+    <script>
+        //Demo
+        layui.use('form', function(){
+          var form = layui.form;
+
+          //监听提交
+          form.on('submit(searchSubmit)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+          });
+        });
+    </script>
+    <script>
+     function add_task() {
+        //iframe窗
+        layer.open({
+            type: 2,
+            title: '添加任务',
+            closeBtn: 1, //不显示关闭按钮
+            shade: [0],
+            area: ['50%', '85%'],
+            offset: 'auto', //右下角弹出
+            shift: 2,
+            content: ['{% url 'tasks:task_add_edit' %}', 'yes'], //iframe的url，no代表不显示滚动条
+
+        });
+    }
+    </script>
+{% endblock %}

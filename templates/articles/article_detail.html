@@ -34,7 +34,7 @@
           </span>
         </div>
         <div class="detail-about">
-          <a class="fly-avatar" href="{% url 'articles:author_detail' article.author.id %}">
+          <a class="fly-avatar" href="{% url 'companies:author_detail' article.author.id %}">
             {% if article.author.profile.avatar %}
                 <img src="/media/{{ article.author.profile.avatar }}" alt="">
             {% else %}
@@ -152,7 +152,7 @@
         
         <div class="layui-form layui-form-pane">
             {% if request.user.is_authenticated %}
-{#              <form action="{% url 'articles:article_detail' article_id %}" method="post">#}
+{#              <form action="{% url 'companies:article_detail' article_id %}" method="post">#}
                 <form class="layui-form">
                     <div class="layui-form-item layui-form-text">
                       <a name="comment"></a>
@@ -184,7 +184,7 @@
               var content = $("#L_content").val();
           $.ajax({
               type: "post",
-              url:"{% url 'articles:article_comment' %}",
+              url:"{% url 'companies:article_comment' %}",
               data:{'article_id': {{ article_id }}, 'content': content},
               dateType:"json",
               async: false,
@@ -214,7 +214,7 @@
     <script>
         $('#zan-article').click(function(){
         $.ajax({
-            url: '{% url 'articles:article_support' %}',
+            url: '{% url 'companies:article_support' %}',
             data: {'article_id': {{ article_id }}, 'action': 'support'},
             type: 'post',
             dataType: 'json',
@@ -239,7 +239,7 @@
     <script>
         $('#unzan-article').click(function(){
         $.ajax({
-            url: '{% url 'articles:article_support' %}',
+            url: '{% url 'companies:article_support' %}',
             data: {'article_id': {{ article_id }}, 'action': 'unsupport'},
             type: 'post',
             dataType: 'json',
@@ -264,7 +264,7 @@
     <script>
         $('#collect').click(function(){
         $.ajax({
-            url: '{% url 'articles:article_collect' %}',
+            url: '{% url 'companies:article_collect' %}',
             data: {'article_id': {{ article_id }}, 'action': 'collect'},
             type: 'post',
             dataType: 'json',
@@ -289,7 +289,7 @@
     <script>
         $('#uncollect').click(function(){
         $.ajax({
-            url: '{% url 'articles:article_collect' %}',
+            url: '{% url 'companies:article_collect' %}',
             data: {'article_id': {{ article_id }}, 'action': 'uncollect'},
             type: 'post',
             dataType: 'json',

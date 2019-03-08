@@ -1,0 +1,6 @@
+# run "pip install -r requirements.txt"
+requests
+scrapy
+urllib
+scrapy_splash
+pymysql

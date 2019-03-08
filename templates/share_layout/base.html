@@ -2,175 +2,178 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="baidu_union_verify" content="f3382f2e9fcab1574ea9b54966418c3b">
-    <meta charset="utf-8">
-  <title>{% block title %}{% endblock %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="keywords" content="佛教修行, 修行">
-  <meta name="description" content="修行">
-  <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}">
-  <link rel="stylesheet" href="{% static 'css/global.css' %}">
-    {% block css %}{% endblock %}
+  <meta charset="utf-8">
+  <title>{% block title %}Merak | 首页{% endblock %}</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}" media="all">
+  <script src="https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc"></script><script>
+  /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
+  </script>
+    <link id="layuicss-layer" rel="stylesheet" href="{% static 'layui/css/modules/layer/default/layer.css' %}" media="all">
+    <link id="layuicss-layuiAdmin" rel="stylesheet" href="{% static 'css/admin.css' %}" media="all">
+      <link rel="stylesheet" href="{% static 'css/global.css' %}">
 </head>
-<body>
+<body layadmin-themealias="default" class="layui-layout-body" style="">
+  <div id="LAY_app" class="layadmin-tabspage-none">
+      <div class="layui-layout layui-layout-admin">
+          <div class="layui-header">
+            <!-- 头部区域 -->
+            <ul class="layui-nav layui-layout-left">
+              <li class="layui-nav-item layadmin-flexible" lay-unselect="">
+                <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩" >
+                  <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+                </a>
+              </li>
+              <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+                <input type="text" placeholder="搜索..." autocomplete="off" class="layui-input layui-input-search" layadmin-event="serach" lay-action="template/search/keywords=">
+              </li>
+            <span class="layui-nav-bar" style="width: 0px; left: 198px; opacity: 0; top: 48px;"></span></ul>
+            <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
 
-<div class="fly-header layui-bg-black">
-  <div class="layui-container">
-    <a class="fly-logo" href="/">
-{#      <img src="{% static 'images/logo.png' %}" alt="找窍门logo" style="width: 100px; height: 45px">#}
-    </a>
-    <ul class="layui-nav fly-nav layui-hide-xs">
-      <li class="layui-nav-item layui-this">
-        <a href="/"><i class="iconfont icon-jiaoliu"></i>首页</a>
-      </li>
-      <li class="layui-nav-item">
-{#        <a href="../../../static/fly-3.0/html/case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>#}
-      </li>
-      <li class="layui-nav-item">
-        <a href="{% url 'articles:about' %}" target="_blank"><i class="iconfont icon-chengshi"></i>关于我</a>
-      </li>
-    </ul>
-    
-    <ul class="layui-nav fly-nav-user">
-      
-      <!-- 登入后的状态 -->
-        {% if request.user.is_authenticated %}
+{#              <li class="layui-nav-item" lay-unselect="">#}
+{#                <a lay-href="app/message/" layadmin-event="message">#}
+{#                  <i class="layui-icon layui-icon-notice"></i>#}
+{##}
+{#                  <!-- 如果有新消息，则显示小圆点 -->#}
+{#                  <script type="text/html" template="" lay-url="./json/message/new.js">#}
+        {#          {{# if(d.data.newmsg){ }} #}
+{#                    <span class="layui-badge-dot"></span>#}
+        {#          {{# } }}#}
+{#                  </script>  <span class="layui-badge-dot"></span>#}
+{#                </a>#}
+{#              </li>#}
+              <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+                <a href="javascript:;" layadmin-event="theme">
+                  <i class="layui-icon layui-icon-theme"></i>
+                </a>
+              </li>
+              <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+                <a href="javascript:;" layadmin-event="note">
+                  <i class="layui-icon layui-icon-note"></i>
+                </a>
+              </li>
+              <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+                <a href="javascript:;" layadmin-event="fullscreen">
+                  <i class="layui-icon layui-icon-screen-full"></i>
+                </a>
+              </li>
+
             <li class="layui-nav-item">
             <a class="fly-nav-avatar" href="javascript:;">
-              <cite class="layui-hide-xs">{{ user }}</cite>
-{#              <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>#}
-{#              <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>#}
-                {% if user.profile.avatar %}
-                    <img src="/media/{{ user.profile.avatar }}" alt="用户头像">
-                {% else %}
-                    <img src="/media/avatar/default.png" alt="默认头像">
-                {% endif %}
+              <cite class="layui-hide-xs">{{ user.username }}</cite>
+{#                {% if user.profile.avatar %}#}
+{#                    <img src="/media/{{ user.profile.avatar }}" alt="">#}
+{#                {% else %}#}
+{#                    <img src="/media/avatar/default.png" alt="">#}
+{#                {% endif %}#}
             </a>
             <dl class="layui-nav-child">
-                <dd><a href="{% url 'users:user_center' %}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>用户中心</a></dd>
-              <dd><a href="{% url 'users:user_set' %}"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
-{#              <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>#}
-{#              <dd><a href="{% url 'users:user_home' user_id %}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>#}
+                <dd><a href="">用户中心</a></dd>
+{#              <dd><a href="{% url 'users:user_set' %}"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>#}
+{#              <dd><a href=""><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>#}
                 {% if request.user.is_superuser %}
-                    <dd><a href="/admin/" target="_blank"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe770;</i>后台管理</a></dd>
+                    <dd><a href="/admin/" target="_blank">后台管理</a></dd>
                 {% endif %}
               <hr style="margin: 5px 0;">
               <dd><a href="{% url 'users:logout' %}" style="text-align: center;">退出</a></dd>
             </dl>
           </li>
 
-{#      <li class="layui-nav-item layui-hide-xs">#}
-{#        <a href="/app/qq/" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" title="QQ登入" class="iconfont icon-qq"></a>#}
-{#      </li>#}
-{#      <li class="layui-nav-item layui-hide-xs">#}
-{#        <a href="/app/weibo/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>#}
-{#      </li>#}
-      
-      <!-- 未登入的状态 -->
-        {% else %}
-          <li class="layui-nav-item">
-            <a class="iconfont icon-touxiang layui-hide-xs" href="{% url 'users:login' %}"></a>
-          </li>
-          <li class="layui-nav-item">
-            <a href="{% url 'users:login' %}">登入</a>
-          </li>
-          <li class="layui-nav-item">
-            <a href="{% url 'users:register' %}">注册</a>
-          </li>
-        {% endif %}
-    </ul>
+              <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+                <a href="javascript:;" layadmin-event="about"><i class=""></i></a>
+              </li>
+              <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect="">
+                <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- 侧边菜单 -->
+          <div class="layui-side layui-side-menu">
+              <div class="layui-side-scroll">
+                  <div class="layui-logo" lay-href="{% url 'companies:index' %}"> <span>安全运维平台</span> </div>
+                  <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+                        <li class="layui-nav-item">
+                            <a href="{% url 'companies:index' %}">
+                                <i class="layui-icon layui-icon-app"></i> <span>首页</span>
+                                <span class="pull-right-container">
+                                    <i class="fa pull-right"></i>
+                                </span>
+                            </a>
+                        </li>
+                    <li class="layui-nav-item">
+                        <a href="{% url 'companies:index' %}" target="_self">
+                            <i class="layui-icon layui-icon-tips"></i> <span>企业列表</span>
+                            <span class="pull-right-container"><i class="fa pull-right"></i></span>
+                        </a>
+                    </li>
+                      <li class="layui-nav-item">
+                        <a href="{% url 'tasks:task_list' 1 %}" target="_self">
+                            <i class="layui-icon layui-icon-tips"></i> <span>任务列表</span>
+                            <span class="pull-right-container"><i class="fa pull-right"></i></span>
+                        </a>
+                    </li>
+                </ul>
+              </div>
+          </div>
+
+          {# 主体内容全放到这里！#}
+        <div class="layui-body" id="LAY_app_body">
+          <div class="layadmin-tabsbody-item layui-show">
+            <div class="layui-fluid">
+                {% block content %}{% endblock %}
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
-</div>
-
-<div class="fly-panel fly-column">
-  <div class="layui-container">
-    <ul class="layui-clear">
-{#      <li class="layui-hide-xs layui-this"><a href="/">首页</a></li>#}
-        {% for t in types %}
-            <li><a href="{% url 'articles:article_type' t.0 %}">{{ t.1 }}</a></li>
-        {% endfor %}
-      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
-      
-      <!-- 用户登入后显示 -->
-{#      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/user/center">我发布的窍门</a></li>#}
-{#      <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="">我的收藏</a></li>#}
-    </ul> 
-    
-    <div class="fly-column-right layui-hide-xs"> 
-      <span class="fly-search" id="book-search"><i class="layui-icon"></i></span>
-      <a href="{% url 'articles:article_add' %}" class="layui-btn">发帖</a>
-    </div>
-  </div>
-</div>
-
-{% block body %}{% endblock %}
-
-<div class="fly-footer">
-  <p><a href="https://www.zqm123.top" target="_blank">社区</a> 2018-2019 &copy; <a href="https://www.zqm123.top" target="_blank">dandh 出品</a></p>
-    <p>本站所展示的信息来自网络转载或由用户自行提供，内容未经本网站证实，请读者仅作参考</p>
-{#    <p>对本文以及其中全部或者部分内容、文字的真实性、完整性、及时性本网站不作任何保证或承诺，不承担任何保证责任，请读者仅作参考，并请自行核实相关内容。</p>#}
-    <p>如果以上内容侵犯您的版权或者非授权发布和其它问题请联系删除，谢谢。</p>
-        <p>第{{ vm.count }}位访客
-{#    <a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>#}
-  </p>
-</div>
- 
-<script src="{% static 'layui/layui.js' %}"></script>
-<script src="{% static 'layui/layui.all.js' %}"></script>
-<script src="{% static 'layui/lay/modules/jquery.js' %}"></script>
-<script type="text/javascript" src="{% static 'layui/lay/modules/jquery-2.2.3.min.js' %}"></script>
+  <script src="{% static 'layui/layui.js' %}"></script>
+  <script src="{% static 'layui/lay/modules/jquery.js' %}"></script>
+  <script src="{% static 'layui/lay/modules/layer.js' %}"></script>
+  <script src="{% static 'layui/layui.all.js' %}"></script>
+  <script type="text/javascript" src="{% static 'layui/jquery-2.2.3.min.js' %}"></script>
 <script>
-    $("#book-search").click( function() {
-        layui.use('layer', function () {
-            layer.open({
-                type: 1
-                , title: false
-                , closeBtn: false
-                , shadeClose: true
-                , maxWidth: 10000
-                , skin: 'fly-layer-search'
-                , content: ['<form action="{% url 'articles:article_search' %}">'
-                    , '<input autocomplete="off" placeholder="搜索内容，回车跳转" type="text" name="q">'
-                    , '</form>'].join('')
-                , success: function (layero) {
-                    var input = layero.find('input');
-                    input.focus();
-
-                    layero.find('form').submit(function () {
-                        var val = input.val();
-                        if (val.replace(/\s/g, '') === '') {
-                            return false;
-                        }
-                        {#input.val('site:layui.com ' + input.val());#}
-                    });
-                }
-            })
-        })
-    })
-</script>
-
-{#<ul class="layui-fixbar">#}
-{#    <li class="layui-icon" lay-type="bar1" style="background-color:#009688"></li>#}
-{#    <li class="layui-icon layui-fixbar-top" lay-type="top" style="background-color: rgb(0, 150, 136); display: list-item;"></li>#}
-{#</ul>#}
-<script>
-    layui.use(['util'], function(){
-        $ = layui.jquery;
-        element = layui.element();//面包导航
-        laypage = layui.laypage;//分页
-        layer = layui.layer;
-        form = layui.form();
-        util = layui.util;
-        util.fixbar({
-            top: true ,css: {right: 15, bottom: 35} ,bgcolor: '#393D49' ,click: function(type){ if(type === 'top'){ layer.msg('返回顶部') } } }); });
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+    var isShow = true;  //定义一个标志位
+    $('.layadmin-flexible').click(function(){
+        //选择出所有的span，并判断是不是hidden
+        $('.layui-nav-item span').each(function(){
+            if($(this).is(':hidden')){
+                $(this).show();
+            }else{
+                $(this).hide();
+            }
+        });
+        //判断isshow的状态
+        if(isShow){
+            $('.layui-side.layui-side-menu').width(60); //设置宽度
+            $('.kit-side-fold i').css('margin-right', '70%');  //修改图标的位置
+            //将footer和body的宽度修改
+            $('.layui-side-scroll.layui-body').css('left', 60+'px');
+            $('.layui-side-scroll.layui-footer').css('left', 60+'px');
+            //将二级导航栏隐藏
+            $('dd span').each(function(){
+                $(this).hide();
+            });
+            //修改标志位
+            isShow =false;
+        }else{
+            $('.layui-side.layui-side-menu').width(200);
+            $('.kit-side-fold i').css('margin-right', '10%');
+            $('.layui-body').css('left', 200+'px');
+            $('.layui-footer').css('left', 200+'px');
+            $('dd span').each(function(){
+                $(this).show();
+            });
+            isShow =true;
+        }
+    });
 
 </script>
-<script type="text/javascript">
-    var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
-    document.write(unescape("%3Cspan id='cnzz_stat_icon_1275934625'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1275934625%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));
-</script>
-
-{% block js %}{% endblock %}
-
+  {% block script %}{% endblock %}
 </body>
 </html>

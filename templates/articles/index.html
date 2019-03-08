@@ -1,52 +1,66 @@
 {% extends 'share_layout/super.html' %}
 
-{% block title %}修行网{% endblock %}
+{% block header %}
+    {% if tag_name %}
+        <title>{{ page_type }}:{{ tag_name }} | {{ SITE_DESCRIPTION }}</title>
+        {% comment %}<meta name="description" content="{{ page_type }}:{{ tag_name }}"/>{% endcomment %}
+    {% else %}
+        <title>{{ SITE_NAME }} | {{ SITE_DESCRIPTION }}</title>
+    {% endif %}
+    <meta name="description" content="{{ SITE_SEO_DESCRIPTION }}"/>
+    <meta name="keywords" content="{{ SITE_KEYWORDS }}"/>
+    <meta property="og:type" content="blog"/>
+    <meta property="og:title" content="{{ SITE_NAME }}"/>
+    <meta property="og:description" content="{{ SITE_DESCRIPTION }}"/>
+    <meta property="og:url" content="{{ SITE_BASE_URL }}"/>
+    <meta property="og:site_name" content="{{ SITE_NAME }}"/>
+{% endblock %}
 
 {% block content %}
     <div class="layui-col-md8">
         <div class="fly-panel" style="margin-bottom: 0;">
             <ul class="fly-list">
-            {% for article in articles %}
-                <li>
-                    <a href="{% url 'users:user_home' article.author.id %}" class="fly-avatar">
-                        {% if article.author.profile.avatar %}
-                            <img src="/media/{{ article.author.profile.avatar }}" alt="">
-                        {% else %}
-                            <img src="/media/avatar/default.png">
-                        {% endif %}
-                    </a>
-                    <h2>
-                        <a href="{% url 'articles:article_detail' article.id %}">{{ article.title }}</a>
-                    </h2>
-                    <div class="fly-list-info">
-                        <cite>{{ article.category }}</cite>
+                {% for article in articles %}
+                    <li>
+                        <a href="{% url 'users:user_home' article.author.id %}" class="fly-avatar">
+                            {% if article.author.profile.avatar %}
+                                <img src="/media/{{ article.author.profile.avatar }}" alt="">
+                            {% else %}
+                                <img src="/media/avatar/default.png">
+                            {% endif %}
+                        </a>
+                        <h2>
+                            <a href="{% url 'companies:article_detail' article.id %}">{{ article.title }}</a>
+                        </h2>
+                        <div class="fly-list-info">
+                            <cite>{{ article.category }}</cite>
 
-{#                      <a href="{% url 'users:user_home' b.author_id %}" link>#}
-                        <cite>{{ article.author }}</cite>
+    {#                      <a href="{% url 'users:user_home' b.author_id %}" link>#}
+                            <cite>{{ article.author }}</cite>
 
-                        <!--
-                        <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
-                        <i class="layui-badge fly-badge-vip">VIP3</i>
-                        -->
-{#                      </a>#}
-                      <span>{{ article.c_time|date:"Y-m-j G:i" }}</span>
+                            <!--
+                            <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
+                            <i class="layui-badge fly-badge-vip">VIP3</i>
+                            -->
+    {#                      </a>#}
+                          <span>{{ article.c_time|date:"Y-m-j G:i" }}</span>
 
-{#                      <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>#}
-                      <!--<span class="layui-badge fly-badge-accept layui-hide-xs">已结</span>-->
-                      <span class="fly-list-nums">
-                        <i class="iconfont icon-pinglun1" title="评论"></i>{{ article.bookuser_set.all|length }}
-                      </span>
-                    </div>
-                    <div class="fly-list-badge">
-                      <!--<span class="layui-badge layui-bg-red">精帖</span>-->
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
+    {#                      <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻"><i class="iconfont icon-kiss"></i> 60</span>#}
+                          <!--<span class="layui-badge fly-badge-accept layui-hide-xs">已结</span>-->
+                          <span class="fly-list-nums">
+                            <i class="iconfont icon-pinglun1" title="评论"></i>{{ article.bookuser_set.all|length }}
+                          </span>
+                        </div>
+                        <div class="fly-list-badge">
+                          <!--<span class="layui-badge layui-bg-red">精帖</span>-->
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
 {#        <div style="text-align: center">#}
 {#          <div class="laypage-main">#}
 {#              {% if pks.has_next %}#}
-{#                <a href="?page={{ pks.next_page_number }}" class="laypage-next">查看更多</a>#}
+{#                <a href="?companies={{ pks.next_page_number }}" class="laypage-next">查看更多</a>#}
 {#              {% endif %}#}
 {#          </div>#}
 {#        </div>#}

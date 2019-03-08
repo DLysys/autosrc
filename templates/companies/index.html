@@ -1,0 +1,192 @@
+{% extends 'share_layout/base.html' %}
+{% load staticfiles %}
+{% block title %}资产列表{% endblock %}
+{% block content %}
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="app-content-list">
+                    <div class="layui-form-item">
+                        <form class="layui-form" action="{% url 'companies:index' %}" method="post">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">IP</label>
+                                <div class="layui-input-inline">
+                                  <input type="text" name="ip_search" placeholder="请输入" class="layui-input">
+                                </div>
+                              </div>
+                              <div class="layui-inline">
+                                <label class="layui-form-label">管理员</label>
+                                <div class="layui-input-inline">
+                                  <input type="text" name="manager_search" placeholder="请输入域账号" class="layui-input">
+                                </div>
+                              </div>
+                              <div class="layui-inline">
+                                  <div class="layui-form-item">
+                                    <label class="layui-form-label">部门</label>
+                                    <div class="layui-input-block">
+                                        <select name="team" lay-verify="required">
+                                          {% for team in teams %}
+                                              {% for key, value in team.items %}
+                                                <option value="{{ value }}">{{ value }}</option>
+                                              {% endfor %}
+                                          {% endfor %}
+                                        </select>
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="layui-inline">
+                                <button class="layui-btn" lay-submit="" lay-filter="submit" value="搜索" data-type="reload">
+                                  <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                                </button>
+                              </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-form">
+                        <table class="layui-table">
+                            <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th class="search-column">类型</th>
+                        <th class="search-column">操作系统</th>
+                        <th>公网IP</th>
+                        <th>内网IP</th>
+                        <th class="search-column">业务线</th>
+                        <th>启用安全服务</th>
+                        <th class="search-column">机房</th>
+                        <th>漏洞数量</th>
+                        <th class="search-column">管理员</th>
+                        <th class="search-column">agent版本</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                            <tbody>
+                      {% for asset in assets %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                                {% if asset.asset_type == 'server' %}
+                                    <td>{{ asset.get_asset_type_display }}</td>
+                                    <td><i class="fa fa-fw fa-{{ asset.server.os_type|lower }}"></i> {{ asset.server.os_distribution }}</td>
+                                {% elif asset.asset_type == "networkdevice" %}
+                                    <td>{{ asset.get_asset_type_display }}</td>
+                                    <td>{{ asset.networkdevice.get_sub_asset_type_display }}</td>
+                                {% elif asset.asset_type == "storagedevice" %}
+                                    <td>{{ asset.get_asset_type_display }}</td>
+                                    <td>{{ asset.storagedevice.get_sub_asset_type_display }}</td>
+                                {% elif asset.asset_type == "securitydevice" %}
+                                    <td>{{ asset.get_asset_type_display }}</td>
+                                    <td>{{ asset.securitydevice.get_sub_asset_type_display }}</td>
+                                {% endif %}
+                            <td>{{ asset.pub_ip|default_if_none:"-" }}</td>
+                            <td>{% if asset.asset_manager %}
+                                    {{ asset.asset_manager.profile.team }}
+                                {% else %}
+                                    {{ asset.dept_nm }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <ul>
+                                    {% if asset.log_analysis %}<img src="{% static 'img/elk_logo.png' %}" style="width: 15px" title="日志分析">{% endif %}
+                                    {% if asset.hole_screening %}<img src="{% static 'img/nessus_logo.png' %}" style="width: 15px" title="漏洞排查">{% endif %}
+                                    {% if asset.intrusion_detection %}<img src="{% static 'img/ossec_logo_bare_small.png' %}" style="width: 15px" title="入侵检测">{% endif %}
+                                    <i class="" {% if asset.security_baseline %}style="color: #28a745;"{% endif %} title="安全基线"></i>
+                                    <i class="" {% if asset.safety_inspection %}style="color: #28a745;"{% endif %} title="安全巡检"></i>
+                                    <i class="" {% if asset.risk_control %}style="color: #28a745;"{% endif %} title="风控"></i>
+                                </ul>
+                            </td>
+{#                                    <td>#}
+{#                                        {% if asset.status == 'online' %}#}
+{#                                            <label class="label label-success">{{ asset.get_status_display }}</label>#}
+{#                                        {% elif asset.status == 'offline' %}#}
+{#                                            <label class="label label-danger">{{ asset.get_status_display }}</label>#}
+{#                                        {% elif asset.status == 'not_monitored' %}#}
+{#                                            <label class="label label-warning">{{ asset.get_status_display }}</label>#}
+{#                                        {% endif %}#}
+{#                                    </td>#}
+                            <td>{{ asset.idc|default:"-" }}</td>
+                            <td style="text-align:center;vertical-align:middle;">
+                                <a type="button" href="{% url '' asset.id %}" title="点击查看设备漏洞明细">
+                                    {% if asset.vuls_num == 0 %}
+                                        <span class="badge bg-green" style="min-width: 30px;">{{ asset.vuls_num }}</span>
+                                    {% elif asset.vuls_num < 3 %}
+                                        <span class="badge bg-blue" style="min-width: 30px;">{{ asset.vuls_num }}</span>
+                                    {% elif asset.vuls_num <= 5 %}
+                                        <span class="badge bg-yellow" style="min-width: 30px;">{{ asset.vuls_num }}</span>
+                                    {% elif asset.vuls_num > 5 %}
+                                        <span class="badge bg-red" style="min-width: 30px;">{{ asset.vuls_num }}</span>
+                                    {% endif %}
+                                </a>
+                            </td>
+                            <td class="text"><a href="{% if asset.asset_manager_id %}{% url 'users:userindex' asset.asset_manager_id %}{% endif %}">{{ asset.asset_manager.profile.chinese_name|default:"" }}</a> </td>
+                            <td>{{ asset.agent_version }}</td>
+                            <td>
+                                <div class="layui-btn-group">
+                                    <button class="layui-btn layui-btn-primary layui-btn-sm">扫描</button>
+                                  <button class="layui-btn layui-btn-primary layui-btn-sm">
+                                    <i class="layui-icon">&#xe642;</i>
+                                  </button>
+                                  <button class="layui-btn layui-btn-primary layui-btn-sm">
+                                    <i class="layui-icon">&#xe640;</i>
+                                  </button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                        </table>
+                    </div>
+                    <div style="border-top: 0px dotted #e2e2e2; text-align: center;">
+                        <div class="laypage-main">
+                            {% if assets.has_previous %}
+                                <a class="laypage-prev" href="{% url '' 1 %}">第一页</a>
+                                <a class="" href="{% url '' %}">上一页</a>
+                            {% endif %}
+
+                            <span class="current">
+                                    第 {{ assets.number }}页 | 共 页
+                            </span>
+
+                            {% if assets.has_next %}
+                                <a class="laypage-next" href="{% url ''  %}">下一页</a>
+                                <a class="laypage-last" href="{% url '' %}">最后一页</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+{#    <script>#}
+{#        layui.use('laypage', function(){#}
+{#          var laypage = layui.laypage;#}
+{##}
+{#          //执行一个laypage实例#}
+{#          laypage.render({#}
+{#             elem: 'assets_paging' //不用加 # 号#}
+{#            ,count: {{ assets_all|length }} //数据总数，从服务端得到#}
+{#            ,jump: function(obj, first){#}
+{#                  currPage=obj.curr;#}
+{#                  if(!first) {#}
+{#                      alert(currPage);#}
+{#    　　　　　　　　　　window.location.href="{% url 'assets:asset_list' 3 %}";//向URL中传递页数并显示#}
+{#                  }#}
+{#            },#}
+{#          });#}
+{#        });#}
+{#    </script>#}
+    <script>
+        //Demo
+        layui.use('form', function(){
+          var form = layui.form;
+
+          //监听提交
+          form.on('submit(searchSubmit)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+          });
+        });
+    </script>
+{% endblock %}

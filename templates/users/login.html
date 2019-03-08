@@ -1,14 +1,26 @@
-{% extends 'share_layout/base.html' %}
-
-{% block title %}登录{% endblock %}
-
-{% block body %}
+{#{% extends 'share_layout/base.html' %}#}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}" media="all">
+  <script src="https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc"></script><script>
+  /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
+  </script>
+    <link id="layuicss-layer" rel="stylesheet" href="{% static 'layui/css/modules/layer/default/layer.css' %}" media="all">
+    <link id="layuicss-layuiAdmin" rel="stylesheet" href="{% static 'css/admin.css' %}" media="all">
+      <link rel="stylesheet" href="{% static 'css/global.css' %}">
+</head>
+<body>
     <div class="layui-container fly-marginTop">
   <div class="fly-panel fly-panel-user" pad20>
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title">
         <li class="layui-this">登入</li>
-        <li><a href="{% url 'users:register' %}">注册</a></li>
       </ul>
       <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
         <div class="layui-tab-item layui-show">
@@ -36,16 +48,13 @@
 {#                  <span style="color: #c00;">#}
 {#                    <input id="id_captcha_1" class="form-control user_captcha" placeholder="请输入验证码" autocomplete="off" autocapitalize="off" spellcheck="false" name="captcha_1" type="text" >#}
                     <img class="captcha" alt="" src="{{image_url}}">
-                    <input id="id_captcha_0" name="captcha_0" value="{{hashkey}}" type="hidden">
+                    <input id="id_captcha_0" name="captcha_0" value="{{ hashkey }}" type="hidden">
                     {{form.captcha.errors}}
 {#                  </span>#}
 {#                </div>#}
               </div>
               <div class="layui-form-item">
                 <button class="layui-btn" lay-filter="L_login" lay-submit>立即登录</button>
-                <span style="padding-left:20px;">
-                  <a href="{% url 'users:find_pass' %}">忘记密码？</a>
-                </span>
                   <p style="color: red;">{{ errors }}</p>
               </div>
 {#              <div class="layui-form-item fly-form-app">#}
@@ -60,11 +69,12 @@
     </div>
   </div>
 </div>
-{% endblock %}
-
-{% block js %}
-     <script>
-        layui.use(['layer','form'], function(){
+<script src="{% static 'layui/layui.js' %}"></script>
+<script src="{% static 'layui/layui.all.js' %}"></script>
+<script src="{% static 'layui/lay/modules/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'layui/lay/modules/jquery-2.2.3.min.js' %}"></script>
+<script>
+    layui.use(['layer','form'], function(){
         var layer = layui.layer
            ,form = layui.form;
           form.on('submit(L_login)', function(data){
@@ -106,9 +116,9 @@
           return false;
             });
           });
-    </script>
-    <script>
-        $("img.captcha").click(function(){
+</script>
+<script>
+    $("img.captcha").click(function(){
             $.ajax({
                 url: '{% url 'users:captcha_refresh' %}',
                 success: function(data){
@@ -118,6 +128,7 @@
 
             });
         });
+</script>
 
-    </script>
-{% endblock %}
+</body>
+</html>

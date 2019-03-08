@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}任务报告{% endblock %}
+
+{% block css %}
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'css/AdminLTE.min.css' %}">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="{% static 'css/skins/_all-skins.min.css' %}">
+    <link rel="stylesheet" href="/static/plugins/hui-iconfont/1.0.1/iconfont.css">
+{#    <script type="text/javascript" src="/static/plugins/Validform/5.3.2/Validform_v5.3.2.js"></script>#}
+{% endblock %}
+
+{% block content %}
+
+    <section class="content-header">
+        <h1>{{ task.task_name }}</h1>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="box box-primary">
+            <table class="layui-table">
+                <tr>
+                    <td style="min-width: 80px"><h5>任务编号：</h5></td>
+                    <td>{{ task.task_num }}</td>
+                    <td style="min-width: 80px"><h5>任务名称：</h5></td>
+                    <td style="max-width: 400px;">{{ task.task_name }}</td>
+                </tr>
+                <tr>
+                    <td><h5>任务类型：</h5></td>
+                    <td>{{ task.scan_type }}</td>
+                    <td><h5>任务描述：</h5></td>
+                    <td>{{ task.task_des }}</td>
+                </tr>
+                <tr>
+                    <td><h5>任务目标：</h5></td>
+                    <td>{{ task.target_address }}</td>
+                    <td><h5>目标用户：</h5></td>
+                    <td>{{ task.target_username }}</td>
+                </tr>
+                <tr>
+                    <td><h5>创建人员：</h5></td>
+                    <td>{{ task.task_user.username }}</td>
+                    <td><h5>创建时间：</h5></td>
+                    <td>{{ task.task_starttime }}</td>
+                </tr>
+            </table>
+
+            {% for subtask in subtasks %}
+                {% if subtask.error_msg %}
+                    <div class="alert alert-warning alert-dismissible " role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>温馨提示!</strong> {{ subtask.error_msg }}
+                    </div>
+                {% endif %}
+                <table class="layui-table">
+                    <tr>
+                        <td style="width: 150px"><h5>扫描策略：</h5></td>
+                        <td>{{ subtask.scanner_policy }}</td>
+                    </tr>
+                    <tr>
+                        <td><h5>扫描标识：</h5></td>
+                        <td>{{ subtask.scan_id }}</td>
+                    </tr>
+                    <tr>
+                        <td><h5>扫描进度：</h5></td>
+                        <td>{{ subtask.get_subtask_status_display }}</td>
+                    </tr>
+                    <tr>
+                        <td><h5>扫描结果报告：</h5></td>
+                        <td>
+                            {% if summary %}
+                                {{ summary }}
+                            {% elif subtask.subtask_status == "exported" %}
+                                 <a href="{% url "tasks:task_report" %}?subtask_id={{ subtask.id }}" target="_blank">{{ subtask.report_name }}</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><h5>报告详细：</h5></td>
+                        <td>{{ wps }}</td>
+                    </tr>
+                </table>
+            {% endfor %}
+        </div>
+    </section>
+    <!-- /.content -->
+    <div class="clearfix"></div>
+{% endblock %}
+
+{% block script %}
+    <link rel="stylesheet" href="{% static 'css/skins/_all-skins.min.css' %}">
+    <link rel="stylesheet" href="/static/plugins/hui-iconfont/1.0.8/iconfont.css">
+    <script type="text/javascript">
+
+         /*任务-报告*/
+        function view_report_pdf(title, url, w, h) {
+            layer_show(title, url, w, h);
+        }
+    </script>
+{% endblock %}

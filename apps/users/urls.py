@@ -6,6 +6,7 @@ from django.conf.urls import include
 app_name = 'users'
 
 urlpatterns = [
+    url(r'^$', views.login_site, name='login_site'),
     url(r'^login$', views.login_site, name='login'),
     url(r'^findpass$', views.find_pass, name='find_pass'),
     url(r'^captcha', include('captcha.urls')),

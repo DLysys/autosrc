@@ -14,7 +14,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from apps.users.models import Profile
 from django.contrib.auth.hashers import make_password
-from apps.articles.models import Book, ArticleUser
+from apps.companies.models import Book, CompanyUser
 from utils.notice import WeChatPub
 from captcha.models import CaptchaStore
 from captcha.helpers import captcha_image_url
@@ -68,14 +68,14 @@ def captcha_refresh(request):
 @csrf_exempt
 def login_site(request):
     def current_user_url(user):
-        _url = 'articles:index'
-        # perms = User.get_all_permissions(user)
-        # if "articles: index" in perms:
-        #     _url = "articles: index"
-        # else:
-        #     _url = 'articles: index'
+        perms = User.get_all_permissions(user)
+        if "auth.add_permission" in perms:
+            _url = reverse("companies:index")
+        else:
+            _url = reverse("users:login", kwargs={"page": 1})
         next = request.GET.get('next', None)
-        return next and next or reverse(_url)
+
+        return next and next or _url
 
     if request.method == 'POST':
         cs = CaptchaStore.objects.filter(response=request.POST.get('vercode'), hashkey=request.POST.get('haskey'))
@@ -182,7 +182,7 @@ def find_pass(request):
 @login_required
 def logout_site(request):
     logout(request)
-    return HttpResponseRedirect(reverse("articles:index"))
+    return HttpResponseRedirect(reverse("companies:index"))
 
 
 def global_settings(request):
@@ -233,7 +233,7 @@ def user_center(request):
     用户中心，收藏
     """
     user = request.user
-    my_books = ArticleUser.objects.filter(user=user, collect=True)
+    my_books = companyUser.objects.filter(user=user, collect=True)
 
     return render(request, 'users/center.html', locals())
 
